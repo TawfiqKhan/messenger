@@ -3,6 +3,7 @@ import { FormControl, FilledInput } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
 import { postMessage } from "../../store/utils/thunkCreators";
+import socket from "../../socket";
 
 const styles = {
   root: {
@@ -29,6 +30,7 @@ class Input extends Component {
     this.setState({
       text: event.target.value,
     });
+    socket.emit("typing", this.props.user);
   };
 
   handleSubmit = async (event) => {
