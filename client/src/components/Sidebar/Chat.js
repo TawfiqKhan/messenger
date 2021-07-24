@@ -1,4 +1,6 @@
-import React, { Component } from "react";
+// import React, { Component } from "react";
+import { useEffect } from "react";
+import axios from "axios";
 import { Box } from "@material-ui/core";
 import { BadgeAvatar, ChatContent } from "../Sidebar";
 import { withStyles } from "@material-ui/core/styles";
@@ -19,9 +21,21 @@ const styles = {
   },
 };
 
+// Add two new column in the conversations
+// use useEffect to update user1lastRead and user2lastread to their last messages
+// Show the icon of read for the last read message
+// later compare total messages to last read message. total unread will be the difference between their index value
+
 function Chat(props) {
+  useEffect(() => {
+    // console.log("From useEffect", props.conversation);
+    axios
+      .post("/api/conversations/new", { id: props.conversation.id })
+      .then((data) => console.log("line 32", data.data));
+  }, []);
+
   const handleClick = async (conversation) => {
-    await this.props.setActiveChat(conversation.otherUser.username);
+    await props.setActiveChat(conversation.otherUser.username);
   };
 
   console.log(props.conversation.messages.length);

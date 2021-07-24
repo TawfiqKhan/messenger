@@ -14,6 +14,16 @@ Conversation.getConversation = async function (conversationId) {
   return conversation;
 };
 
+// Update Conversation wi
+Conversation.updateConversation = async function (conversationId) {
+  const conversation = await Conversation.findOne({
+    raw: true,
+    where: { id: conversationId },
+  });
+  // return conversation or null if it doesn't exist
+  return conversation;
+};
+
 Conversation.findConversation = async function (user1Id, user2Id) {
   const conversation = await Conversation.findOne({
     where: {

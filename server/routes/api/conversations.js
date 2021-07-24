@@ -81,7 +81,11 @@ router.get("/", async (req, res, next) => {
 
 router.post("/new", async (req, res) => {
   // res.send(req.body.id);
-  const conversation = await Conversation.getConversation(req.body.id);
+  const conversation = await Conversation.updateConversation(req.body.id);
+  // Conversation.update({
+  //   test: "just Testing",
+  // });
+  // console.log(conversation);
   res.send(conversation);
 });
 
