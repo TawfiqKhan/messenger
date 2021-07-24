@@ -5,6 +5,7 @@ import {
   addConversation,
   setNewMessage,
   setSearchedUsers,
+  addOtherUserActiveChat,
 } from "../conversations";
 import { gotUser, setFetchingStatus } from "../user";
 
@@ -106,6 +107,15 @@ export const postMessage = (body) => async (dispatch) => {
   } catch (error) {
     console.error(error);
   }
+};
+
+export const getRecipientData = (convoId, recipientId) => async (dispatch) => {
+  console.log("line 113-----", recipientId);
+  const { data } = await axios.post("/api/conversations/recipientData", {
+    recipientId: recipientId,
+  });
+  console.log("---------Line 120-------", data);
+  dispatch(addOtherUserActiveChat(convoId, data));
 };
 
 export const searchUsers = (searchTerm) => async (dispatch) => {

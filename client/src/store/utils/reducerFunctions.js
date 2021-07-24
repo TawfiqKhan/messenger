@@ -10,7 +10,7 @@ export const addMessageToStore = (state, payload) => {
     newConvo.latestMessageText = message.text;
     return [newConvo, ...state];
   }
-
+  console.log("state:::::", state);
   return state.map((convo) => {
     if (convo.id === message.conversationId) {
       const convoCopy = { ...convo };
@@ -37,11 +37,29 @@ export const addTypingStatus = (state, payload) => {
   });
 };
 
+export const addOtherUserActiveChatToStore = (state, payload) => {
+  const { convoId, recipientData } = payload;
+  console.log("line 42---------------", recipientData);
+  return state.map((convo) => {
+    if (convo.id === convoId) {
+      const convoCopy = { ...convo };
+      convoCopy.otherUser = {
+        ...convo.otherUser,
+        activeConvo: recipientData.convoId || null,
+      };
+      return convoCopy;
+    } else {
+      return convo;
+    }
+  });
+};
+
 export const addOnlineUserToStore = (state, id) => {
   return state.map((convo) => {
     if (convo.otherUser.id === id) {
       const convoCopy = { ...convo };
       convoCopy.otherUser.online = true;
+      convoCopy.otherUser.testing = "Yes";
       return convoCopy;
     } else {
       return convo;

@@ -5,6 +5,8 @@ import {
   removeOfflineUser,
   addOnlineUser,
   setTypingStatus,
+  // setRecipeintActiveConv,
+  addActiveChat,
 } from "./store/conversations";
 
 const socket = io(window.location.origin);
@@ -21,23 +23,25 @@ socket.on("connect", () => {
   });
 
   socket.on("new-message", (data) => {
+    console.log("From new message-------", data);
     store.dispatch(setNewMessage(data.message, data.sender));
   });
 
   socket.on("sending-message", (data) => {
     //client receiving emit, now need to get check state and send back user conversations status
     // Or we can save user current conversation in server
-    console.log("Line 30---", data);
-    // store.dispatch(setNewMessage(data.message, data.sender));
+    console.log("Line 33-------", data);
+    // socket.emit("return-message", { info: "coming back" });
+    // store.dispatch(setRecipeintActiveConv(data.recipient, data.convoId));
   });
 
   socket.on("update-active-chat", (data) => {
     console.log("I am here---");
     console.log("from client socket", data);
+    // store.dispatch(addActiveChat(data));
   });
 
   socket.on("typing-test", (data) => {
-    console.log("Line 25 data.reqBody", data.body);
     store.dispatch(setTypingStatus(data.body.reqBody, true));
     setTimeout(() => {
       store.dispatch(setTypingStatus(data.body.reqBody, false));

@@ -3,8 +3,9 @@ import { useState } from "react";
 import { FormControl, FilledInput } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
-import { postMessage } from "../../store/utils/thunkCreators";
+import { postMessage, getRecipientData } from "../../store/utils/thunkCreators";
 import socket from "../../socket";
+import axios from "axios";
 
 const styles = {
   root: {
@@ -55,10 +56,17 @@ function Input(props) {
       await props.postMessage(reqBody);
       setText("");
     } else {
-      socket.emit("sending-message", {
-        convoId: props.conversationId,
-        recipientId: props.otherUser.id,
-      });
+      // Have to try to implement current conv in otheruser section. when someone logout or login othyer user login status gets updated for eveyone
+      // Have to try to do that when an user changes his active chat
+
+      // Updating thr state with for other users activeChat
+      // Noticed two bugs, during first conversation after searching  a user, typed message are sent to other online users, goes away after refresh
+      // if a user reloads a page and dont have any active chat open, their past active chat remains(reset active chat on page load)
+
+      // two condition here, if online and dont have active chat then receiverHasRead = false
+      // else if active chat/conv == current convo receiverHasRead = true
+      console.log("Line 61----", props.otherUser.id);
+      await props.getRecipientData(props.conversationId, props.otherUser.id);
       const reqBody = {
         text: event.target.text.value,
         recipientId: props.otherUser.id,
@@ -97,6 +105,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     postMessage: (message) => {
       dispatch(postMessage(message));
+    },
+    getRecipientData: (convoId, recipientId) => {
+      dispatch(getRecipientData(convoId, recipientId));
     },
   };
 };
