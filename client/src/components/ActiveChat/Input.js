@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { FormControl, FilledInput } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
-import { postMessage, showTypingStatus } from "../../store/utils/thunkCreators";
+import { postMessage } from "../../store/utils/thunkCreators";
 import socket from "../../socket";
 
 const styles = {
@@ -30,14 +30,24 @@ class Input extends Component {
     this.setState({
       text: event.target.value,
     });
-    // socket.emit("typing", this.props.user);
     const reqBody = {
       recipientId: this.props.otherUser.id,
       conversationId: this.props.conversationId,
       sender: this.props.conversationId ? null : this.props.user,
     };
-    await this.props.showTypingStatus(reqBody);
+    socket.emit("typing-test", { reqBody });
+    // await this.props.showTypingStatus(reqBody);
   };
+
+  // handleKeydown = async (event) => {
+  //   console.log("I am happening");
+  //   const reqBody = {
+  //     recipientId: this.props.otherUser.id,
+  //     conversationId: this.props.conversationId,
+  //     sender: this.props.conversationId ? null : this.props.user,
+  //   };
+  //   await this.props.showTypingStatus(reqBody);
+  // };
 
   handleSubmit = async (event) => {
     event.preventDefault();
@@ -66,6 +76,8 @@ class Input extends Component {
             value={this.state.text}
             name="text"
             onChange={this.handleChange}
+            // onKeyDown={(e) => console.log("Happening")}
+            // onKeyDown={this.handleKeydown}
           />
         </FormControl>
       </form>
@@ -84,9 +96,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
     postMessage: (message) => {
       dispatch(postMessage(message));
-    },
-    showTypingStatus: (body) => {
-      dispatch(showTypingStatus(body));
     },
   };
 };

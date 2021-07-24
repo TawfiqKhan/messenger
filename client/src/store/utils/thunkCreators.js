@@ -5,7 +5,6 @@ import {
   addConversation,
   setNewMessage,
   setSearchedUsers,
-  setTypingStatus,
 } from "../conversations";
 import { gotUser, setFetchingStatus } from "../user";
 
@@ -91,18 +90,6 @@ const sendMessage = (data, body) => {
     sender: data.sender,
   });
 };
-
-const showTyping = (body) => {
-  socket.emit("typing", {
-    info: body,
-  });
-};
-
-export const showTypingStatus = (body) => async (dispatch) => {
-  dispatch(setTypingStatus(body));
-  showTyping(body);
-};
-
 // message format to send: {recipientId, text, conversationId}
 // conversationId will be set to null if its a brand new conversation
 export const postMessage = (body) => async (dispatch) => {
@@ -111,6 +98,7 @@ export const postMessage = (body) => async (dispatch) => {
     if (!body.conversationId) {
       dispatch(addConversation(body.recipientId, data.message));
     } else {
+      // console.log("Displatiching from Else---");
       dispatch(setNewMessage(data.message));
     }
 

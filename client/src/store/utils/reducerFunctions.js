@@ -29,7 +29,7 @@ export const addTypingStatus = (state, payload) => {
   return state.map((convo) => {
     if (convo.id === conversation.conversationId) {
       const convoCopy = { ...convo };
-      convoCopy.isTyping = true;
+      convoCopy.isTyping = isTyping;
       return convoCopy;
     } else {
       return convo;
