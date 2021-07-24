@@ -59,15 +59,26 @@ io.on("connection", (socket) => {
 
   socket.on("sending-message", (body) => {
     // sending emit to client
-    console.log("Line 62", body);
-    // socket.broadcast.emit("sending-message");
+    // console.log("Received in server From Thomas---");
+    // console.log("Line 62", body);
+    // console.log("onlineUsers---", onlineUsers);
+    const recipient = onlineUsers.filter(
+      (user) => user.id === body.recipientId
+    );
+    console.log("recipient---", recipient);
+    // get data from onlineUsers and emit it back
+    // socket.broadcast.emit("sending-message", {
+    //   convoId: body.convoId,
+    //   recipient: recipient[0],
+    // });
   });
 
   socket.on("update-active-chat", (body) => {
     let user = onlineUsers.filter((user) => user.id === body.userId);
-    user[0].covoId = body.convoId;
-    user[0].convoWith = body.receiverId;
-    // console.log("Line 72---", user);
+    user[0].convoId = body.convoId || null;
+    user[0].convoWith = body.receiverId || null;
+    // console.log("onlineUsers----", onlineUsers);
+    // console.log("user-----", user);
     socket.broadcast.emit("update-active-chat", { body });
   });
 

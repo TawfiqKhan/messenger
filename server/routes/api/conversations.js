@@ -89,4 +89,13 @@ router.post("/new", async (req, res) => {
   res.send(conversation);
 });
 
+router.post("/recipientData", async (req, res) => {
+  console.log("Reached route", req.body.recipientId);
+  const [recipient] = onlineUsers.filter(
+    (user) => user.id === req.body.recipientId
+  );
+  console.log("sending this data----", recipient);
+  res.send(recipient);
+});
+
 module.exports = router;
