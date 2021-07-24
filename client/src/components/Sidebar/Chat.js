@@ -21,26 +21,34 @@ const styles = {
   },
 };
 
-// Add two new column in the conversations
-// use useEffect to update user1lastRead and user2lastread to their last messages
-// Show the icon of read for the last read message
-// later compare total messages to last read message. total unread will be the difference between their index value
+// show unread message count
+// during adding a message to db, check if receiver is online, if not unread status false
+// if online but conversation is not active chat then unread status false
 
 function Chat(props) {
-  useEffect(() => {
-    // console.log("From useEffect", props.conversation);
-    axios
-      .post("/api/conversations/new", { id: props.conversation.id })
-      .then((data) => console.log("line 32", data.data));
-  }, []);
+  //   useEffect(() => {
+  //     // console.log("From useEffect", props.conversation);
+  //     axios
+  //       .post("/api/conversations/new", { id: props.conversation.id })
+  //       .then((data) => console.log("line 32", data.data));
+  //   }, []);
 
   const handleClick = async (conversation) => {
     await props.setActiveChat(conversation.otherUser.username);
   };
 
-  console.log(props.conversation.messages.length);
+  const { otherUser, messages } = props.conversation;
+
+  console.log("line 42----", otherUser);
+  function totalUnread(messages) {
+    const unreadMessages = messages.filter(
+      (message) => message.receiverHasRead === false
+    );
+    console.log(messages);
+    return unreadMessages.length;
+  }
+  // console.log("Line 42---", props.conversation);
   const { classes } = props;
-  const otherUser = props.conversation.otherUser;
   return (
     <Box
       onClick={() => handleClick(props.conversation)}
@@ -52,6 +60,7 @@ function Chat(props) {
         online={otherUser.online}
         sidebar={true}
       />
+      <div>{`Hi ${totalUnread(messages)}`}</div>
       <ChatContent conversation={props.conversation} />
     </Box>
   );
