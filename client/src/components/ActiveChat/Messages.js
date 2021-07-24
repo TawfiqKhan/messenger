@@ -32,7 +32,8 @@ const useStyles = makeStyles(() => ({
 const Messages = (props) => {
   const classes = useStyles();
   const { messages, otherUser, userId, isTyping } = props;
-  console.log("Line 8----", props);
+  console.log("Line 35", messages);
+  console.log("Line 35", messages.length);
 
   return (
     <Box>
