@@ -24,6 +24,19 @@ export const addMessageToStore = (state, payload) => {
   });
 };
 
+export const addTypingStatus = (state, payload) => {
+  const { conversation, isTyping } = payload;
+  return state.map((convo) => {
+    if (convo.id === conversation.conversationId) {
+      const convoCopy = { ...convo };
+      convoCopy.isTyping = true;
+      return convoCopy;
+    } else {
+      return convo;
+    }
+  });
+};
+
 export const addOnlineUserToStore = (state, id) => {
   return state.map((convo) => {
     if (convo.otherUser.id === id) {

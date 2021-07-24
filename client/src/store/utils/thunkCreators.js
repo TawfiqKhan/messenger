@@ -5,6 +5,7 @@ import {
   addConversation,
   setNewMessage,
   setSearchedUsers,
+  setTypingStatus,
 } from "../conversations";
 import { gotUser, setFetchingStatus } from "../user";
 
@@ -89,6 +90,17 @@ const sendMessage = (data, body) => {
     recipientId: body.recipientId,
     sender: data.sender,
   });
+};
+
+const showTyping = (body) => {
+  socket.emit("typing", {
+    info: body,
+  });
+};
+
+export const showTypingStatus = (body) => async (dispatch) => {
+  dispatch(setTypingStatus(body));
+  showTyping(body);
 };
 
 // message format to send: {recipientId, text, conversationId}

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { FormControl, FilledInput } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
-import { postMessage } from "../../store/utils/thunkCreators";
+import { postMessage, showTypingStatus } from "../../store/utils/thunkCreators";
 import socket from "../../socket";
 
 const styles = {
@@ -26,11 +26,17 @@ class Input extends Component {
     };
   }
 
-  handleChange = (event) => {
+  handleChange = async (event) => {
     this.setState({
       text: event.target.value,
     });
-    socket.emit("typing", this.props.user);
+    // socket.emit("typing", this.props.user);
+    const reqBody = {
+      recipientId: this.props.otherUser.id,
+      conversationId: this.props.conversationId,
+      sender: this.props.conversationId ? null : this.props.user,
+    };
+    await this.props.showTypingStatus(reqBody);
   };
 
   handleSubmit = async (event) => {
@@ -78,6 +84,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     postMessage: (message) => {
       dispatch(postMessage(message));
+    },
+    showTypingStatus: (body) => {
+      dispatch(showTypingStatus(body));
     },
   };
 };
