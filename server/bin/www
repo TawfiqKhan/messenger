@@ -59,20 +59,20 @@ io.on("connection", (socket) => {
 
   socket.on("sending-message", (body) => {
     // sending emit to client
-    socket.broadcast.emit("sending-message");
+    console.log("Line 62", body);
+    // socket.broadcast.emit("sending-message");
   });
 
   socket.on("update-active-chat", (body) => {
-    console.log("from server----", body);
     let user = onlineUsers.filter((user) => user.id === body.userId);
     user[0].covoId = body.convoId;
     user[0].convoWith = body.receiverId;
-    console.log("Line 72---", user);
+    // console.log("Line 72---", user);
     socket.broadcast.emit("update-active-chat", { body });
   });
 
   socket.on("logout", (id) => {
-    if (onlineUsers.includes(id)) {
+    if (onlineUsers.some((user) => user.id === id)) {
       userIndex = onlineUsers.indexOf(id);
       onlineUsers.splice(userIndex, 1);
       socket.broadcast.emit("remove-offline-user", id);

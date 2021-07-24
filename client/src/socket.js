@@ -27,7 +27,8 @@ socket.on("connect", () => {
   socket.on("sending-message", (data) => {
     //client receiving emit, now need to get check state and send back user conversations status
     // Or we can save user current conversation in server
-    store.dispatch(setNewMessage(data.message, data.sender));
+    console.log("Line 30---", data);
+    // store.dispatch(setNewMessage(data.message, data.sender));
   });
 
   socket.on("update-active-chat", (data) => {

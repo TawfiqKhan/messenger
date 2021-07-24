@@ -36,23 +36,38 @@ function Input(props) {
     // await props.showTypingStatus(reqBody);
   };
 
-  console.log(otherUser);
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     // Emitting message to check if the receivers active conversation is this one
     // first sending to server bin/www
     // socket.emit("sending-message");
     // add sender user info if posting to a brand new convo, so that the other user will have access to username, profile pic, etc.
-    const reqBody = {
-      text: event.target.text.value,
-      recipientId: props.otherUser.id,
-      conversationId: props.conversationId,
-      sender: props.conversationId ? null : props.user,
-      receiverHasRead: otherUser.online,
-    };
-    await props.postMessage(reqBody);
-    setText("");
+
+    // if other user is not online, save message as unread
+    if (!otherUser.online) {
+      const reqBody = {
+        text: event.target.text.value,
+        recipientId: props.otherUser.id,
+        conversationId: props.conversationId,
+        sender: props.conversationId ? null : props.user,
+        receiverHasRead: false,
+      };
+      await props.postMessage(reqBody);
+      setText("");
+    } else {
+      socket.emit("sending-message", {
+        convoId: props.conversationId,
+        recipientId: props.otherUser.id,
+      });
+      const reqBody = {
+        text: event.target.text.value,
+        recipientId: props.otherUser.id,
+        conversationId: props.conversationId,
+        sender: props.conversationId ? null : props.user,
+        receiverHasRead: false,
+      };
+      await props.postMessage(reqBody);
+    }
   };
 
   return (
