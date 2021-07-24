@@ -6,6 +6,7 @@ import { BadgeAvatar, ChatContent } from "../Sidebar";
 import { withStyles } from "@material-ui/core/styles";
 import { setActiveChat } from "../../store/activeConversation";
 import { connect } from "react-redux";
+import socket from "../../socket";
 
 const styles = {
   root: {
@@ -32,19 +33,23 @@ function Chat(props) {
   //       .post("/api/conversations/new", { id: props.conversation.id })
   //       .then((data) => console.log("line 32", data.data));
   //   }, []);
-
   const handleClick = async (conversation) => {
+    console.log("Line 37----", conversation);
+    console.log("user", props.user);
+    socket.emit("update-active-chat", {
+      userId: props.user.id,
+      convoId: conversation.id,
+      receiverId: conversation.otherUser.id,
+    });
     await props.setActiveChat(conversation.otherUser.username);
   };
 
   const { otherUser, messages } = props.conversation;
 
-  console.log("line 42----", otherUser);
   function totalUnread(messages) {
-    const unreadMessages = messages.filter(
-      (message) => message.receiverHasRead === false
-    );
-    console.log(messages);
+    const unreadMessages = messages.filter((message) => {
+      return message.receiverHasRead === false;
+    });
     return unreadMessages.length;
   }
   // console.log("Line 42---", props.conversation);

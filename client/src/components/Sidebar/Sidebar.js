@@ -38,6 +38,7 @@ const Sidebar = (props) => {
             <Chat
               conversation={conversation}
               key={conversation.otherUser.username}
+              user={props.user}
             />
           );
         })}

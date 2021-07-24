@@ -33,8 +33,12 @@ const io = require("socket.io")(server);
 
 io.on("connection", (socket) => {
   socket.on("go-online", (id) => {
-    if (!onlineUsers.includes(id)) {
-      onlineUsers.push(id);
+    // if (!onlineUsers.includes(id)) {
+    //   onlineUsers.push(id);
+    // }
+
+    if (!onlineUsers.some((user) => user.id === id)) {
+      onlineUsers.push({ id });
     }
     // send the user who just went online to everyone else who is already online
     socket.broadcast.emit("add-online-user", id);
@@ -51,6 +55,20 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("typing-test", {
       body,
     });
+  });
+
+  socket.on("sending-message", (body) => {
+    // sending emit to client
+    socket.broadcast.emit("sending-message");
+  });
+
+  socket.on("update-active-chat", (body) => {
+    console.log("from server----", body);
+    let user = onlineUsers.filter((user) => user.id === body.userId);
+    user[0].covoId = body.convoId;
+    user[0].convoWith = body.receiverId;
+    console.log("Line 72---", user);
+    socket.broadcast.emit("update-active-chat", { body });
   });
 
   socket.on("logout", (id) => {

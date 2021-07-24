@@ -21,6 +21,7 @@ const styles = {
 
 function Input(props) {
   const [text, setText] = useState("");
+  const { classes, otherUser } = props;
 
   const handleChange = async (event) => {
     const { value } = event.target;
@@ -35,31 +36,25 @@ function Input(props) {
     // await props.showTypingStatus(reqBody);
   };
 
-  // handleKeydown = async (event) => {
-  //   console.log("I am happening");
-  //   const reqBody = {
-  //     recipientId: props.otherUser.id,
-  //     conversationId: props.conversationId,
-  //     sender: props.conversationId ? null : props.user,
-  //   };
-  //   await props.showTypingStatus(reqBody);
-  // };
+  console.log(otherUser);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
+    // Emitting message to check if the receivers active conversation is this one
+    // first sending to server bin/www
+    // socket.emit("sending-message");
     // add sender user info if posting to a brand new convo, so that the other user will have access to username, profile pic, etc.
     const reqBody = {
       text: event.target.text.value,
       recipientId: props.otherUser.id,
       conversationId: props.conversationId,
       sender: props.conversationId ? null : props.user,
+      receiverHasRead: otherUser.online,
     };
     await props.postMessage(reqBody);
-    this.setState({
-      text: "",
-    });
+    setText("");
   };
 
-  const { classes, otherUser } = props;
   return (
     <form className={classes.root} onSubmit={handleSubmit}>
       <FormControl fullWidth hiddenLabel>

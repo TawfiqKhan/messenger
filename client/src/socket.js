@@ -24,6 +24,17 @@ socket.on("connect", () => {
     store.dispatch(setNewMessage(data.message, data.sender));
   });
 
+  socket.on("sending-message", (data) => {
+    //client receiving emit, now need to get check state and send back user conversations status
+    // Or we can save user current conversation in server
+    store.dispatch(setNewMessage(data.message, data.sender));
+  });
+
+  socket.on("update-active-chat", (data) => {
+    console.log("I am here---");
+    console.log("from client socket", data);
+  });
+
   socket.on("typing-test", (data) => {
     console.log("Line 25 data.reqBody", data.body);
     store.dispatch(setTypingStatus(data.body.reqBody, true));
