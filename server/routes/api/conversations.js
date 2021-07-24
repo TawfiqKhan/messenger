@@ -79,4 +79,10 @@ router.get("/", async (req, res, next) => {
   }
 });
 
+router.post("/new", async (req, res) => {
+  // res.send(req.body.id);
+  const conversation = await Conversation.getConversation(req.body.id);
+  res.send(conversation);
+});
+
 module.exports = router;
