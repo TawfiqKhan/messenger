@@ -73,7 +73,7 @@ async function seed() {
     user1Id: thomas.id,
   });
 
-  for (let i = 0; i < 11; i++) {
+  for (let i = 0; i < 3; i++) {
     await Message.create({
       conversationId: hualingConvo.id,
       senderId: hualing.id,

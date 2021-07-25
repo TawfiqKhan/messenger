@@ -47,9 +47,10 @@ function Chat(props) {
   const { otherUser, messages } = props.conversation;
 
   function totalUnread(messages) {
-    const unreadMessages = messages.filter((message) => {
-      return message.receiverHasRead === false;
-    });
+    const unreadMessages = messages.filter(
+      (message) =>
+        message.senderId !== props.user.id && !message.receiverHasRead
+    );
     return unreadMessages.length;
   }
   // console.log("Line 42---", props.conversation);

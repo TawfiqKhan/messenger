@@ -1,8 +1,9 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Box } from "@material-ui/core";
 import { Input, Header, Messages } from "./index";
 import { connect } from "react-redux";
+import axios from "axios";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -20,11 +21,31 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+// once a chat is active, have a useEffect sent request to backebnd to update all the messages where user is not the sender to read
+// lets first get all the messages where user is not sender
+
 const ActiveChat = (props) => {
+  const [conversationId, setConversationId] = useState(null);
   const classes = useStyles();
   const { user } = props;
   const conversation = props.conversation || {};
+  const { messages } = conversation;
 
+  useEffect(() => {
+    setConversationId(conversation.id);
+  });
+
+  useEffect(() => {
+    console.log("I am running------");
+    if (messages) {
+      const receivedMessages = messages
+        .filter(
+          (message) => message.senderId !== user.id && !message.receiverHasRead
+        )
+        .map((message) => message.id);
+      axios.post("/api/messages/update", { messages: receivedMessages });
+    }
+  }, [conversationId]);
   return (
     <Box className={classes.root}>
       {conversation.otherUser && (

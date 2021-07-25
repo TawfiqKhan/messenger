@@ -57,4 +57,22 @@ router.post("/", async (req, res, next) => {
   }
 });
 
+router.post("/update", async (req, res) => {
+  console.log("Reached here in message routee", req.body);
+  const updatedMessages = await Message.update(
+    { receiverHasRead: true },
+    {
+      where: {
+        id: req.body.messages,
+      },
+    }
+  );
+  console.log(updatedMessages);
+  //   User.update({ activationStatus: 'active'}, {
+  //     where: {
+  //         id: [1,2,3,4,5,6,7,8,9,10]
+  //     }
+  // });
+});
+
 module.exports = router;

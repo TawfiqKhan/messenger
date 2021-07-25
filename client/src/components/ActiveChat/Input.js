@@ -63,9 +63,11 @@ function Input(props) {
       if (props.otherUser.activeConvo === props.conversationId) {
         let body = { ...reqBody, receiverHasRead: true };
         await props.postMessage(body);
+        setText("");
       } else {
         let body = { ...reqBody, receiverHasRead: false };
         await props.postMessage(body);
+        setText("");
       }
     }
   };
