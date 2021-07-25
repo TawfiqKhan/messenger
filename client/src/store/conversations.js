@@ -4,6 +4,7 @@ import {
   addSearchedUsersToStore,
   removeOfflineUserFromStore,
   addMessageToStore,
+  updateMessagesInStore,
   addTypingStatus,
   addOtherUserActiveChatToStore,
 } from "./utils/reducerFunctions";
@@ -12,6 +13,7 @@ import {
 
 const GET_CONVERSATIONS = "GET_CONVERSATIONS";
 const SET_MESSAGE = "SET_MESSAGE";
+const UPDATE_MESSAGES_READ_STATUS = "UPDATE_MESSAGES_READ_STATUS";
 const SET_TYPING = "SET_TYPING";
 const ADD_ONLINE_USER = "ADD_ONLINE_USER";
 const REMOVE_OFFLINE_USER = "REMOVE_OFFLINE_USER";
@@ -33,6 +35,14 @@ export const setNewMessage = (message, sender) => {
   return {
     type: SET_MESSAGE,
     payload: { message, sender: sender || null },
+  };
+};
+
+export const updateMessagesReadStatus = (messages, convoId) => {
+  console.log("---------Updat Message is running----------");
+  return {
+    type: UPDATE_MESSAGES_READ_STATUS,
+    payload: { messages, convoId },
   };
 };
 
@@ -95,6 +105,8 @@ const reducer = (state = [], action) => {
       return addMessageToStore(state, action.payload);
     case SET_TYPING:
       return addTypingStatus(state, action.payload);
+    case UPDATE_MESSAGES_READ_STATUS:
+      return updateMessagesInStore(state, action.payload);
     case ADD_OTHER_USER_ACTIVE_CHAT:
       return addOtherUserActiveChatToStore(state, action.payload);
     case ADD_ONLINE_USER: {

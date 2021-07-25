@@ -6,6 +6,7 @@ import {
   setNewMessage,
   setSearchedUsers,
   addOtherUserActiveChat,
+  updateMessagesReadStatus,
 } from "../conversations";
 import { gotUser, setFetchingStatus } from "../user";
 
@@ -109,12 +110,24 @@ export const postMessage = (body) => async (dispatch) => {
   }
 };
 
+export const updateMessages = (messages, convoId) => async (dispatch) => {
+  console.log("Line 114------Update messages function running----");
+  try {
+    //Update in DB
+    const data = await axios.post("/api/messages/update", {
+      messages: messages,
+    });
+    // update in State
+    dispatch(updateMessagesReadStatus(messages, convoId));
+    console.log(data.data);
+  } catch (error) {
+    console.error(error);
+  }
+};
 export const getRecipientData = (convoId, recipientId) => async (dispatch) => {
-  console.log("line 113-----", recipientId);
   const { data } = await axios.post("/api/conversations/recipientData", {
     recipientId: recipientId,
   });
-  console.log("---------Line 120-------", data);
   dispatch(addOtherUserActiveChat(convoId, data));
 };
 

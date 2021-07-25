@@ -1,3 +1,5 @@
+import { updateMessages } from "./thunkCreators";
+
 export const addMessageToStore = (state, payload) => {
   const { message, sender } = payload;
   // if sender isn't null, that means the message needs to be put in a brand new convo
@@ -17,6 +19,28 @@ export const addMessageToStore = (state, payload) => {
       convoCopy.messages.push(message);
       convoCopy.latestMessageText = message.text;
 
+      return convoCopy;
+    } else {
+      return convo;
+    }
+  });
+};
+
+export const updateMessagesInStore = (state, { messages, convoId }) => {
+  return state.map((convo) => {
+    if (convo.id === convoId) {
+      const convoCopy = { ...convo };
+      const updatedMessages = convoCopy.messages.map((message) => {
+        if (
+          message.senderId === convoCopy.otherUser.id &&
+          !message.receiverHasRead
+        ) {
+          return { ...message, receiverHasRead: true };
+        } else {
+          return message;
+        }
+      });
+      convoCopy.messages = updatedMessages;
       return convoCopy;
     } else {
       return convo;

@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Box } from "@material-ui/core";
 import { Input, Header, Messages } from "./index";
 import { connect } from "react-redux";
-import axios from "axios";
+import { updateMessages } from "../../store/utils/thunkCreators";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -37,14 +37,26 @@ const ActiveChat = (props) => {
 
   useEffect(() => {
     console.log("I am running------");
-    if (messages) {
-      const receivedMessages = messages
-        .filter(
-          (message) => message.senderId !== user.id && !message.receiverHasRead
-        )
-        .map((message) => message.id);
-      axios.post("/api/messages/update", { messages: receivedMessages });
-    }
+    // if (messages) {
+    //   const receivedMessages = messages
+    //     .filter(
+    //       (message) => message.senderId !== user.id && !message.receiverHasRead
+    //     )
+    //     .map((message) => message.id);
+    const updateReceivedMessages = async () => {
+      if (messages) {
+        const receivedMessages = messages
+          .filter(
+            (message) =>
+              message.senderId !== user.id && !message.receiverHasRead
+          )
+          .map((message) => message.id);
+        await props.updateMessages(receivedMessages, conversationId);
+      }
+      // console.log("now update message will run------");
+      // updateMessages(messages);
+    };
+    updateReceivedMessages();
   }, [conversationId]);
   return (
     <Box className={classes.root}>
@@ -85,4 +97,11 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, null)(ActiveChat);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateMessages: (messages, convoId) => {
+      dispatch(updateMessages(messages, convoId));
+    },
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(ActiveChat);
