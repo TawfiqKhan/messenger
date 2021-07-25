@@ -34,8 +34,6 @@ function Chat(props) {
   //       .then((data) => console.log("line 32", data.data));
   //   }, []);
   const handleClick = async (conversation) => {
-    console.log("Line 37----", conversation);
-    console.log("user", props.user);
     socket.emit("update-active-chat", {
       userId: props.user.id,
       convoId: conversation.id,

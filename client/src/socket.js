@@ -5,7 +5,7 @@ import {
   removeOfflineUser,
   addOnlineUser,
   setTypingStatus,
-  // setRecipeintActiveConv,
+  addOtherUserActiveChat,
   addActiveChat,
 } from "./store/conversations";
 
@@ -22,6 +22,7 @@ socket.on("connect", () => {
     store.dispatch(removeOfflineUser(id));
   });
 
+  // This listener is for reciver client, who will update their state with the new message`
   socket.on("new-message", (data) => {
     console.log("From new message-------", data);
     store.dispatch(setNewMessage(data.message, data.sender));
@@ -38,7 +39,7 @@ socket.on("connect", () => {
   socket.on("update-active-chat", (data) => {
     console.log("I am here---");
     console.log("from client socket", data);
-    // store.dispatch(addActiveChat(data));
+    store.dispatch(addOtherUserActiveChat(data.convoId, data));
   });
 
   socket.on("typing-test", (data) => {

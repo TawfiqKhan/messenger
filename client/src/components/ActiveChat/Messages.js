@@ -67,9 +67,7 @@ const Messages = (props) => {
             </Box>
           </Box>
         </Box>
-      ) : (
-        <Button variant="primary">Primary</Button>
-      )}
+      ) : null}
     </Box>
   );
 };

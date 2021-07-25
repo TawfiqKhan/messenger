@@ -86,6 +86,7 @@ const saveMessage = async (body) => {
 };
 
 const sendMessage = (data, body) => {
+  // This listener is for sender who is emiting that he sent a message, he has updated the state(line 105) before sending this emit
   socket.emit("new-message", {
     message: data.message,
     recipientId: body.recipientId,
@@ -100,7 +101,6 @@ export const postMessage = (body) => async (dispatch) => {
     if (!body.conversationId) {
       dispatch(addConversation(body.recipientId, data.message));
     } else {
-      // console.log("Displatiching from Else---");
       dispatch(setNewMessage(data.message));
     }
 
@@ -111,7 +111,6 @@ export const postMessage = (body) => async (dispatch) => {
 };
 
 export const updateMessages = (messages, convoId) => async (dispatch) => {
-  console.log("Line 114------Update messages function running----");
   try {
     //Update in DB
     const data = await axios.post("/api/messages/update", {
@@ -119,7 +118,6 @@ export const updateMessages = (messages, convoId) => async (dispatch) => {
     });
     // update in State
     dispatch(updateMessagesReadStatus(messages, convoId));
-    console.log(data.data);
   } catch (error) {
     console.error(error);
   }
@@ -128,6 +126,8 @@ export const getRecipientData = (convoId, recipientId) => async (dispatch) => {
   const { data } = await axios.post("/api/conversations/recipientData", {
     recipientId: recipientId,
   });
+  console.log("-----------", data);
+  console.log("convoID------", convoId);
   dispatch(addOtherUserActiveChat(convoId, data));
 };
 

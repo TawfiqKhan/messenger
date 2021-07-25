@@ -67,6 +67,7 @@ router.post("/update", async (req, res) => {
       },
     }
   );
+
   return res.json("okay");
 });
 

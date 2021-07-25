@@ -4,6 +4,7 @@ import { Box } from "@material-ui/core";
 import { Input, Header, Messages } from "./index";
 import { connect } from "react-redux";
 import { updateMessages } from "../../store/utils/thunkCreators";
+import socket from "../../socket";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -26,6 +27,7 @@ const useStyles = makeStyles(() => ({
 
 const ActiveChat = (props) => {
   const [conversationId, setConversationId] = useState(null);
+  const [lastReadMessage, setLastReadMessage] = useState(null);
   const classes = useStyles();
   const { user } = props;
   const conversation = props.conversation || {};
@@ -33,16 +35,17 @@ const ActiveChat = (props) => {
 
   useEffect(() => {
     setConversationId(conversation.id);
+    // console.log("line 36----", conversation.otherUser);
   });
 
   useEffect(() => {
-    console.log("I am running------");
-    // if (messages) {
-    //   const receivedMessages = messages
-    //     .filter(
-    //       (message) => message.senderId !== user.id && !message.receiverHasRead
-    //     )
-    //     .map((message) => message.id);
+    if (conversation.otherUser && conversation.otherUser.online) {
+      console.log("I am running------");
+      console.log(conversation.otherUser);
+    }
+  }, [conversation.otherUser]);
+
+  useEffect(() => {
     const updateReceivedMessages = async () => {
       if (messages) {
         const receivedMessages = messages
@@ -52,12 +55,25 @@ const ActiveChat = (props) => {
           )
           .map((message) => message.id);
         await props.updateMessages(receivedMessages, conversationId);
+        // socket.emit("update-active-chat");
       }
-      // console.log("now update message will run------");
-      // updateMessages(messages);
     };
     updateReceivedMessages();
   }, [conversationId]);
+
+  // function getLastMessage() {
+  //   if (messages) {
+  //     const lastReadMessage = messages.filter(
+  //       (message) => message.senderId !== user.id && message.receiverHasRead
+  //     );
+  //     console.log("Last Message", lastReadMessage);
+  //   }
+  // }
+  // getLastMessage();
+
+  // function lastReadMessage() {
+  //   console.log(conversation);
+  // }
   return (
     <Box className={classes.root}>
       {conversation.otherUser && (

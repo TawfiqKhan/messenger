@@ -39,7 +39,6 @@ export const setNewMessage = (message, sender) => {
 };
 
 export const updateMessagesReadStatus = (messages, convoId) => {
-  console.log("---------Updat Message is running----------");
   return {
     type: UPDATE_MESSAGES_READ_STATUS,
     payload: { messages, convoId },
