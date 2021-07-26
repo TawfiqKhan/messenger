@@ -27,7 +27,10 @@ const useStyles = makeStyles(() => ({
 
 const ActiveChat = (props) => {
   const [conversationId, setConversationId] = useState(null);
-  const [lastReadMessage, setLastReadMessage] = useState(null);
+  const [lastReadMessage, setLastReadMessage] = useState({
+    id: 30,
+    text: " Hello",
+  });
   const classes = useStyles();
   const { user } = props;
   const conversation = props.conversation || {};
@@ -38,10 +41,29 @@ const ActiveChat = (props) => {
     // console.log("line 36----", conversation.otherUser);
   });
 
+  //if online do somethind
+  // if online and has active convo
+  // if not online or no active convo
+
   useEffect(() => {
-    if (conversation.otherUser && conversation.otherUser.online) {
-      console.log("I am running------");
-      console.log(conversation.otherUser);
+    if (messages) {
+      if (conversation.otherUser.online && conversation.otherUser.activeConvo) {
+        if (conversation.otherUser.activeConvo === conversation.id) {
+          console.log("Inside Nested If-----", conversation.messages);
+          const lastMessage = conversation.messages.filter(
+            (message) => message.senderId === user.id
+          );
+          console.log("Last message-----", lastMessage);
+          setLastReadMessage(lastMessage[lastMessage.length - 1]);
+        }
+      } else {
+        const lastMessage = messages.filter(
+          (message) => message.senderId === user.id && message.receiverHasRead
+        );
+        setLastReadMessage(lastMessage[lastMessage.length - 1]);
+        // console.log("From Else----", messages);
+        console.log("From Else----", lastMessage);
+      }
     }
   }, [conversation.otherUser]);
 
@@ -59,21 +81,8 @@ const ActiveChat = (props) => {
       }
     };
     updateReceivedMessages();
-  }, [conversationId]);
+  }, [conversation.id]);
 
-  // function getLastMessage() {
-  //   if (messages) {
-  //     const lastReadMessage = messages.filter(
-  //       (message) => message.senderId !== user.id && message.receiverHasRead
-  //     );
-  //     console.log("Last Message", lastReadMessage);
-  //   }
-  // }
-  // getLastMessage();
-
-  // function lastReadMessage() {
-  //   console.log(conversation);
-  // }
   return (
     <Box className={classes.root}>
       {conversation.otherUser && (
@@ -88,6 +97,7 @@ const ActiveChat = (props) => {
               isTyping={conversation.isTyping || null}
               otherUser={conversation.otherUser}
               userId={user.id}
+              lastMessage={lastReadMessage}
             />
             <Input
               otherUser={conversation.otherUser}

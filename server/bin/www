@@ -75,6 +75,7 @@ io.on("connection", (socket) => {
 
   socket.on("update-active-chat", (body) => {
     let user = onlineUsers.filter((user) => user.id === body.userId);
+    console.log("user-----", user);
     user[0].convoId = body.convoId || null;
     user[0].convoWith = body.receiverId || null;
     socket.broadcast.emit("update-active-chat", {
