@@ -55,10 +55,12 @@ function Input(props) {
       // if a user reloads a page and dont have any active chat open, their past active chat remains(reset active chat on page load)
 
       // get recivers active conversation and set the reciverHasRead status based on that
-      const activeConv = await axios.post("/api/conversations/activeConv", {
+      // await props.getRecipientData(props.conversationId, props.otherUser.id);
+      const receiver = await axios.post("/api/conversations/getReceiver", {
         userId: otherUser.id,
       });
-      if (activeConv.data === props.conversationId) {
+      // console.log("receiver-----", receiver);
+      if (receiver.data.activeConv === props.conversationId) {
         let body = { ...reqBody, receiverHasRead: true };
         await props.postMessage(body);
         setText("");

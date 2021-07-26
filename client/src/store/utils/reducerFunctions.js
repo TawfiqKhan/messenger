@@ -26,32 +26,32 @@ export const addMessageToStore = (state, payload) => {
   });
 };
 
-export const updateMessagesInStore = (state, { messages, convoId }) => {
-  console.log("Convoid::::", convoId);
+export const updateMessagesInStore = (state, { convoId }) => {
+  // console.log("Line 30----Convoid::::", convoId);
   return state.map((convo) => {
     if (convo.id === convoId) {
-      console.log("found-----", convo.id);
+      // console.log("found-----", convo.id);
       const convoCopy = { ...convo };
       const updatedMessages = convoCopy.messages.map((message) => {
-        console.log(
-          "sender---::",
-          message.senderId,
-          "OtherUser::",
-          convoCopy.otherUser.id,
-          "read stat:::",
-          message.receiverHasRead
-        );
+        // console.log(
+        //   "sender---::",
+        //   message.senderId,
+        //   "OtherUser::",
+        //   convoCopy.otherUser.id,
+        //   "read stat:::",
+        //   message.receiverHasRead
+        // );
         if (
-          message.senderId === convoCopy.otherUser.id &&
+          // message.senderId === convoCopy.otherUser.id &&
           !message.receiverHasRead
         ) {
-          console.log("Inside IF----Returning", {
-            ...message,
-            receiverHasRead: true,
-          });
+          // console.log("Inside IF----Returning", {
+          //   ...message,
+          //   receiverHasRead: true,
+          // });
           return { ...message, receiverHasRead: true };
         } else {
-          console.log("From Else----");
+          // console.log("From Else----");
           return message;
         }
       });

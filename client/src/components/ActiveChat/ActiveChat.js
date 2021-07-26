@@ -5,6 +5,7 @@ import { Input, Header, Messages } from "./index";
 import { connect } from "react-redux";
 import { updateMessages } from "../../store/utils/thunkCreators";
 import socket from "../../socket";
+import axios from "axios";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -26,7 +27,7 @@ const useStyles = makeStyles(() => ({
 // lets first get all the messages where user is not sender
 
 const ActiveChat = (props) => {
-  // const [conversationId, setConversationId] = useState(null);
+  const [conversationId, setConversationId] = useState(null);
   const [lastReadMessage, setLastReadMessage] = useState({
     id: 30,
     text: " Hello",
@@ -37,35 +38,62 @@ const ActiveChat = (props) => {
   const { messages } = conversation;
 
   // useEffect(() => {
-  //   console.log("Line 40----", conversation.id);
-  //   setConversationId(conversation.id);
-  //   // console.log("line 36----", conversation.otherUser);
-  // });
+  //   // setConversationId(conversation.id);
+  //   socket.on("update-messages", (convoId) => {
+  //     console.log(convoId);
+  //     console.log("Line 45----", conversation.id);
+  //     // console.log("Messages", conversation.messages);
+  //   });
+  // }, []);
+  // console.log("Line 45----", conversation.id);
 
   //if online do somethind
   // if online and has active convo
   // if not online or no active convo
 
   useEffect(() => {
+    // socket.on("update-messages", (convoId) => {
+    //   setTimeout(() => {
+    //     console.log("Getting return emit---", convoId.convoId);
+    //     console.log("conversation-----", conversationId);
+    //     if (convoId.convoId === conversation.id) {
+    //       const lastMessage = conversation.messages.filter((message) => {
+    //         return message.senderId === user.id;
+    //       });
+    //       console.log("Last message-----", lastMessage);
+    //       setLastReadMessage(lastMessage[lastMessage.length - 1]);
+    //     }
+    //   }, 1000);
+    // });
+    // console.log("Running----");
     if (messages) {
-      if (conversation.otherUser.online && conversation.otherUser.activeConvo) {
-        if (conversation.otherUser.activeConvo === conversation.id) {
+      (async () => {
+        const receiver = await axios.post("/api/conversations/getReceiver", {
+          userId: conversation.otherUser.id,
+        });
+        if (
+          receiver.data.online &&
+          receiver.data.activeConvo &&
+          receiver.data.activeConvo === conversation.id
+        ) {
           const lastMessage = conversation.messages.filter((message) => {
             return message.senderId === user.id;
           });
-          console.log("Last message-----", lastMessage);
+          // console.log("Last message-----", lastMessage);
+          setLastReadMessage(lastMessage[lastMessage.length - 1]);
+        } else {
+          const lastMessage = messages.filter(
+            (message) => message.senderId === user.id && message.receiverHasRead
+          );
           setLastReadMessage(lastMessage[lastMessage.length - 1]);
         }
-      } else {
-        const lastMessage = messages.filter(
-          (message) => message.senderId === user.id && message.receiverHasRead
-        );
-        setLastReadMessage(lastMessage[lastMessage.length - 1]);
-      }
+      })();
     }
-  }, [conversation.otherUser]);
+  });
 
   useEffect(() => {
+    // console.log("Running once----");
+    console.log("Line 95-----", conversationId);
     const updateReceivedMessages = async () => {
       if (messages) {
         const receivedMessages = messages
@@ -76,7 +104,7 @@ const ActiveChat = (props) => {
           .map((message) => message.id);
         console.log("line 76----", conversation.id);
         await props.updateMessages(receivedMessages, conversation.id);
-        // socket.emit("update-active-chat");
+        socket.emit("update-messages", { convoId: conversation.id });
       }
     };
     updateReceivedMessages();

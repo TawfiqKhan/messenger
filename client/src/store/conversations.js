@@ -38,10 +38,10 @@ export const setNewMessage = (message, sender) => {
   };
 };
 
-export const updateMessagesReadStatus = (messages, convoId) => {
+export const updateMessagesReadStatus = (convoId) => {
   return {
     type: UPDATE_MESSAGES_READ_STATUS,
-    payload: { messages, convoId },
+    payload: { convoId },
   };
 };
 

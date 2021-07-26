@@ -120,7 +120,7 @@ export const updateMessages = (messages, convoId) => async (dispatch) => {
       messages: messages,
     });
     // update in State
-    dispatch(updateMessagesReadStatus(messages, convoId));
+    dispatch(updateMessagesReadStatus(convoId));
   } catch (error) {
     console.error(error);
   }

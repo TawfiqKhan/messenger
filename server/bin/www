@@ -73,6 +73,11 @@ io.on("connection", (socket) => {
     // });
   });
 
+  socket.on("update-messages", (convoId) => {
+    console.log("Inside socket----");
+    socket.broadcast.emit("update-messages", { convoId: convoId });
+  });
+
   socket.on("update-active-chat", (body) => {
     let user = onlineUsers.filter((user) => user.id === body.userId);
     console.log("user-----", user);

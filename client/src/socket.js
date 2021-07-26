@@ -6,7 +6,7 @@ import {
   addOnlineUser,
   setTypingStatus,
   addOtherUserActiveChat,
-  addActiveChat,
+  updateMessagesReadStatus,
 } from "./store/conversations";
 
 const socket = io(window.location.origin);
@@ -40,6 +40,11 @@ socket.on("connect", () => {
     console.log("I am here---");
     console.log("from client socket", data);
     store.dispatch(addOtherUserActiveChat(data.convoId, data));
+  });
+
+  socket.on("update-messages", (convoId) => {
+    console.log("Getting return emit---", convoId);
+    store.dispatch(updateMessagesReadStatus(convoId));
   });
 
   socket.on("typing-test", (data) => {

@@ -50,7 +50,7 @@ function Chat(props) {
       userId: props.user.id,
       convoId: conversation.id,
     });
-    console.log("line 49------", conversation.id);
+    // console.log("line 49------", conversation.id);
     await props.setActiveChat(conversation.otherUser.username);
 
     setTotalUnread(0);
