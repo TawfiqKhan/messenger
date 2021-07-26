@@ -5,6 +5,7 @@ import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
 import { postMessage, getRecipientData } from "../../store/utils/thunkCreators";
 import socket from "../../socket";
+import axios from "axios";
 
 const styles = {
   root: {
@@ -50,17 +51,14 @@ function Input(props) {
       await props.postMessage(body);
       setText("");
     } else {
-      // Updating thr state with for other users activeChat
       // Noticed two bugs, during first conversation after searching  a user, typed message are sent to other online users, goes away after refresh
       // if a user reloads a page and dont have any active chat open, their past active chat remains(reset active chat on page load)
 
-      // two condition here, if online and dont have active chat then receiverHasRead = false
-      // else if active chat/conv == current convo receiverHasRead = true
-      await props.getRecipientData(props.conversationId, props.otherUser.id);
-      //if the reciver is in  the same conversation meaning message will be read
-      console.log(props.otherUser);
-      console.log(props.conversationId);
-      if (props.otherUser.activeConvo === props.conversationId) {
+      // get recivers active conversation and set the reciverHasRead status based on that
+      const activeConv = await axios.post("/api/conversations/activeConv", {
+        userId: otherUser.id,
+      });
+      if (activeConv.data === props.conversationId) {
         let body = { ...reqBody, receiverHasRead: true };
         await props.postMessage(body);
         setText("");

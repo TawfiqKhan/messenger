@@ -98,4 +98,12 @@ router.post("/recipientData", async (req, res) => {
   res.send(recipient);
 });
 
+router.post("/activeConv", async (req, res) => {
+  const data = await User.findByPk(req.body.userId);
+  // res.send(data.dataValues.activeConv);
+  console.log("line 104", data.dataValues.activeConv);
+  const activeConv = data.dataValues.activeConv;
+  res.json(activeConv);
+});
+
 module.exports = router;

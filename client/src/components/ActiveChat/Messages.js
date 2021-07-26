@@ -10,7 +10,6 @@ import {
   Divider,
 } from "@material-ui/core";
 import moment from "moment";
-import Button from "react-bootstrap/Button";
 
 const useStyles = makeStyles(() => ({
   root: {

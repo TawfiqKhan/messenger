@@ -26,7 +26,7 @@ const useStyles = makeStyles(() => ({
 // lets first get all the messages where user is not sender
 
 const ActiveChat = (props) => {
-  const [conversationId, setConversationId] = useState(null);
+  // const [conversationId, setConversationId] = useState(null);
   const [lastReadMessage, setLastReadMessage] = useState({
     id: 30,
     text: " Hello",
@@ -36,10 +36,11 @@ const ActiveChat = (props) => {
   const conversation = props.conversation || {};
   const { messages } = conversation;
 
-  useEffect(() => {
-    setConversationId(conversation.id);
-    // console.log("line 36----", conversation.otherUser);
-  });
+  // useEffect(() => {
+  //   console.log("Line 40----", conversation.id);
+  //   setConversationId(conversation.id);
+  //   // console.log("line 36----", conversation.otherUser);
+  // });
 
   //if online do somethind
   // if online and has active convo
@@ -73,7 +74,8 @@ const ActiveChat = (props) => {
               message.senderId !== user.id && !message.receiverHasRead
           )
           .map((message) => message.id);
-        await props.updateMessages(receivedMessages, conversationId);
+        console.log("line 76----", conversation.id);
+        await props.updateMessages(receivedMessages, conversation.id);
         // socket.emit("update-active-chat");
       }
     };

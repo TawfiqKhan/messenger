@@ -40,13 +40,19 @@ function Chat(props) {
     setTotalUnread(unreadMessages.length);
   });
   const handleClick = async (conversation) => {
-    console.log("Sending conVOID::::::::", conversation.id);
-    socket.emit("update-active-chat", {
+    // console.log("Sending conVOID::::::::", conversation.id);
+    // socket.emit("update-active-chat", {
+    //   userId: props.user.id,
+    //   convoId: conversation.id,
+    //   receiverId: conversation.otherUser.id,
+    // });
+    await axios.post("/auth/user/edit", {
       userId: props.user.id,
       convoId: conversation.id,
-      receiverId: conversation.otherUser.id,
     });
+    console.log("line 49------", conversation.id);
     await props.setActiveChat(conversation.otherUser.username);
+
     setTotalUnread(0);
   };
 
