@@ -49,10 +49,9 @@ const ActiveChat = (props) => {
     if (messages) {
       if (conversation.otherUser.online && conversation.otherUser.activeConvo) {
         if (conversation.otherUser.activeConvo === conversation.id) {
-          console.log("Inside Nested If-----", conversation.messages);
-          const lastMessage = conversation.messages.filter(
-            (message) => message.senderId === user.id
-          );
+          const lastMessage = conversation.messages.filter((message) => {
+            return message.senderId === user.id;
+          });
           console.log("Last message-----", lastMessage);
           setLastReadMessage(lastMessage[lastMessage.length - 1]);
         }
@@ -61,8 +60,6 @@ const ActiveChat = (props) => {
           (message) => message.senderId === user.id && message.receiverHasRead
         );
         setLastReadMessage(lastMessage[lastMessage.length - 1]);
-        // console.log("From Else----", messages);
-        console.log("From Else----", lastMessage);
       }
     }
   }, [conversation.otherUser]);

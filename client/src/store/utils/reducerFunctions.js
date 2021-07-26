@@ -79,7 +79,9 @@ export const addOtherUserActiveChatToStore = (state, payload) => {
 };
 
 export const addOnlineUserToStore = (state, id) => {
+  console.log("State:::::::", state, "id:::::", id);
   return state.map((convo) => {
+    console.log("Here-----");
     if (convo.otherUser.id === id) {
       const convoCopy = { ...convo };
       convoCopy.otherUser.online = true;

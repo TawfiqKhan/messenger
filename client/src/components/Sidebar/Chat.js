@@ -1,9 +1,10 @@
 // import React, { Component } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { Box } from "@material-ui/core";
 import { BadgeAvatar, ChatContent } from "../Sidebar";
 import { withStyles } from "@material-ui/core/styles";
+import { Badge } from "@material-ui/core";
 import { setActiveChat } from "../../store/activeConversation";
 import { connect } from "react-redux";
 import socket from "../../socket";
@@ -16,6 +17,7 @@ const styles = {
     marginBottom: 10,
     display: "flex",
     alignItems: "center",
+    justifyContent: "space-between",
     "&:hover": {
       cursor: "grab",
     },
@@ -27,30 +29,36 @@ const styles = {
 // if online but conversation is not active chat then unread status false
 
 function Chat(props) {
-  //   useEffect(() => {
-  //     // console.log("From useEffect", props.conversation);
-  //     axios
-  //       .post("/api/conversations/new", { id: props.conversation.id })
-  //       .then((data) => console.log("line 32", data.data));
-  //   }, []);
+  const [totalUnread, setTotalUnread] = useState(5);
+  useEffect(() => {
+    // console.log("Messages----", messages);
+    const unreadMessages = messages.filter(
+      (message) =>
+        message.senderId !== props.user.id && !message.receiverHasRead
+    );
+    // console.log("UnRead------", unreadMessages);
+    setTotalUnread(unreadMessages.length);
+  });
   const handleClick = async (conversation) => {
+    console.log("Sending conVOID::::::::", conversation.id);
     socket.emit("update-active-chat", {
       userId: props.user.id,
       convoId: conversation.id,
       receiverId: conversation.otherUser.id,
     });
     await props.setActiveChat(conversation.otherUser.username);
+    setTotalUnread(0);
   };
 
   const { otherUser, messages } = props.conversation;
 
-  function totalUnread(messages) {
-    const unreadMessages = messages.filter(
-      (message) =>
-        message.senderId !== props.user.id && !message.receiverHasRead
-    );
-    return unreadMessages.length;
-  }
+  // function totalUnread(messages) {
+  //   const unreadMessages = messages.filter(
+  //     (message) =>
+  //       message.senderId !== props.user.id && !message.receiverHasRead
+  //   );
+  //   return unreadMessages.length;
+  // }
   // console.log("Line 42---", props.conversation);
   const { classes } = props;
   return (
@@ -64,8 +72,9 @@ function Chat(props) {
         online={otherUser.online}
         sidebar={true}
       />
-      <div>{`Hi ${totalUnread(messages)}`}</div>
       <ChatContent conversation={props.conversation} />
+      {/* <div>{`${totalUnread(messages)}`}</div> */}
+      <Badge badgeContent={totalUnread} color="primary"></Badge>
     </Box>
   );
 }
