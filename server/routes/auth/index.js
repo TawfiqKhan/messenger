@@ -18,9 +18,8 @@ router.post("/register", async (req, res, next) => {
         .status(400)
         .json({ error: "Password must be at least 6 characters" });
     }
-
-    const user = await User.create(req.body);
-
+    console.log(req.body);
+    const user = await User.create({ ...req.body, online: true });
     const token = jwt.sign(
       { id: user.dataValues.id },
       process.env.SESSION_SECRET,
@@ -59,6 +58,15 @@ router.post("/login", async (req, res, next) => {
       console.log({ error: "Wrong username and/or password" });
       res.status(401).json({ error: "Wrong username and/or password" });
     } else {
+      // updating user login value in db
+      await User.update(
+        { online: true },
+        {
+          where: {
+            username: username,
+          },
+        }
+      );
       const token = jwt.sign(
         { id: user.dataValues.id },
         process.env.SESSION_SECRET,
@@ -74,7 +82,15 @@ router.post("/login", async (req, res, next) => {
   }
 });
 
-router.delete("/logout", (req, res, next) => {
+router.delete("/logout", async (req, res, next) => {
+  await User.update(
+    { online: false },
+    {
+      where: {
+        id: req.body.id,
+      },
+    }
+  );
   res.sendStatus(204);
 });
 

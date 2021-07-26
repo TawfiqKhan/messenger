@@ -49,7 +49,9 @@ export const register = (credentials) => async (dispatch) => {
 export const login = (credentials) => async (dispatch) => {
   try {
     const { data } = await axios.post("/auth/login", credentials);
+    console.log("After Login-----", data);
     await localStorage.setItem("messenger-token", data.token);
+    // await axios.delete("/auth/logout");
     dispatch(gotUser(data));
     socket.emit("go-online", data.id);
   } catch (error) {
@@ -59,8 +61,9 @@ export const login = (credentials) => async (dispatch) => {
 };
 
 export const logout = (id) => async (dispatch) => {
+  console.log("ID:::::::", id);
   try {
-    await axios.delete("/auth/logout");
+    await axios.delete("/auth/logout", { data: { id } });
     await localStorage.removeItem("messenger-token");
     dispatch(gotUser({}));
     socket.emit("logout", id);
