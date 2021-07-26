@@ -31,26 +31,17 @@ const styles = {
 function Chat(props) {
   const [totalUnread, setTotalUnread] = useState(5);
   useEffect(() => {
-    // console.log("Messages----", messages);
     const unreadMessages = messages.filter(
       (message) =>
         message.senderId !== props.user.id && !message.receiverHasRead
     );
-    // console.log("UnRead------", unreadMessages);
     setTotalUnread(unreadMessages.length);
   });
   const handleClick = async (conversation) => {
-    // console.log("Sending conVOID::::::::", conversation.id);
-    // socket.emit("update-active-chat", {
-    //   userId: props.user.id,
-    //   convoId: conversation.id,
-    //   receiverId: conversation.otherUser.id,
-    // });
     await axios.post("/auth/user/edit", {
       userId: props.user.id,
       convoId: conversation.id,
     });
-    // console.log("line 49------", conversation.id);
     await props.setActiveChat(conversation.otherUser.username);
 
     setTotalUnread(0);
@@ -58,14 +49,6 @@ function Chat(props) {
 
   const { otherUser, messages } = props.conversation;
 
-  // function totalUnread(messages) {
-  //   const unreadMessages = messages.filter(
-  //     (message) =>
-  //       message.senderId !== props.user.id && !message.receiverHasRead
-  //   );
-  //   return unreadMessages.length;
-  // }
-  // console.log("Line 42---", props.conversation);
   const { classes } = props;
   return (
     <Box

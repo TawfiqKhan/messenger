@@ -58,39 +58,15 @@ io.on("connection", (socket) => {
   });
 
   socket.on("sending-message", (body) => {
-    // sending emit to client
-    // console.log("Received in server From Thomas---");
-    // console.log("Line 62", body);
-    // console.log("onlineUsers---", onlineUsers);
     const recipient = onlineUsers.filter(
       (user) => user.id === body.recipientId
     );
     console.log("recipient---", recipient);
-    // get data from onlineUsers and emit it back
-    // socket.broadcast.emit("sending-message", {
-    //   convoId: body.convoId,
-    //   recipient: recipient[0],
-    // });
   });
 
   socket.on("update-messages", (convoId) => {
     console.log("Inside socket----");
     socket.broadcast.emit("update-messages", { convoId: convoId });
-  });
-
-  socket.on("update-active-chat", (body) => {
-    let user = onlineUsers.filter((user) => user.id === body.userId);
-    console.log("user-----", user);
-    // Updating online users data as onlines users is a global variable on the server side
-    user[0].convoId = body.convoId || null;
-    user[0].convoWith = body.receiverId || null;
-    socket.broadcast.emit("update-active-chat", {
-      convoId: body.convoId,
-      userId: body.userId,
-      convoWith: body.receiverId,
-    });
-
-    console.log("convoId::: ", body.convoId, "userId:::", body.userId);
   });
 
   socket.on("logout", (id) => {

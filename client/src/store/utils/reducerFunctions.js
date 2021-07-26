@@ -30,28 +30,11 @@ export const updateMessagesInStore = (state, { convoId }) => {
   // console.log("Line 30----Convoid::::", convoId);
   return state.map((convo) => {
     if (convo.id === convoId) {
-      // console.log("found-----", convo.id);
       const convoCopy = { ...convo };
       const updatedMessages = convoCopy.messages.map((message) => {
-        // console.log(
-        //   "sender---::",
-        //   message.senderId,
-        //   "OtherUser::",
-        //   convoCopy.otherUser.id,
-        //   "read stat:::",
-        //   message.receiverHasRead
-        // );
-        if (
-          // message.senderId === convoCopy.otherUser.id &&
-          !message.receiverHasRead
-        ) {
-          // console.log("Inside IF----Returning", {
-          //   ...message,
-          //   receiverHasRead: true,
-          // });
+        if (!message.receiverHasRead) {
           return { ...message, receiverHasRead: true };
         } else {
-          // console.log("From Else----");
           return message;
         }
       });

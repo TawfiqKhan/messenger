@@ -129,8 +129,6 @@ export const getRecipientData = (convoId, recipientId) => async (dispatch) => {
   const { data } = await axios.post("/api/conversations/recipientData", {
     recipientId: recipientId,
   });
-  console.log("-----------", data);
-  console.log("convoID------", convoId);
   dispatch(addOtherUserActiveChat(convoId, data));
 };
 

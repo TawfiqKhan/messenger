@@ -27,7 +27,8 @@ const useStyles = makeStyles(() => ({
 // lets first get all the messages where user is not sender
 
 const ActiveChat = (props) => {
-  const [conversationId, setConversationId] = useState(null);
+  // const [conversationId, setConversationId] = useState(null);
+  // const [checkOtherUser, setCheckOtherUser] = useState(false);
   const [lastReadMessage, setLastReadMessage] = useState({
     id: 30,
     text: " Hello",
@@ -37,35 +38,7 @@ const ActiveChat = (props) => {
   const conversation = props.conversation || {};
   const { messages } = conversation;
 
-  // useEffect(() => {
-  //   // setConversationId(conversation.id);
-  //   socket.on("update-messages", (convoId) => {
-  //     console.log(convoId);
-  //     console.log("Line 45----", conversation.id);
-  //     // console.log("Messages", conversation.messages);
-  //   });
-  // }, []);
-  // console.log("Line 45----", conversation.id);
-
-  //if online do somethind
-  // if online and has active convo
-  // if not online or no active convo
-
   useEffect(() => {
-    // socket.on("update-messages", (convoId) => {
-    //   setTimeout(() => {
-    //     console.log("Getting return emit---", convoId.convoId);
-    //     console.log("conversation-----", conversationId);
-    //     if (convoId.convoId === conversation.id) {
-    //       const lastMessage = conversation.messages.filter((message) => {
-    //         return message.senderId === user.id;
-    //       });
-    //       console.log("Last message-----", lastMessage);
-    //       setLastReadMessage(lastMessage[lastMessage.length - 1]);
-    //     }
-    //   }, 1000);
-    // });
-    // console.log("Running----");
     if (messages) {
       (async () => {
         const receiver = await axios.post("/api/conversations/getReceiver", {
@@ -92,8 +65,6 @@ const ActiveChat = (props) => {
   });
 
   useEffect(() => {
-    // console.log("Running once----");
-    console.log("Line 95-----", conversationId);
     const updateReceivedMessages = async () => {
       if (messages) {
         const receivedMessages = messages
