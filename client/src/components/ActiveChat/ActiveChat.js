@@ -37,11 +37,8 @@ const ActiveChat = (props) => {
         const receiver = await axios.post("/api/conversations/getReceiver", {
           userId: conversation.otherUser.id,
         });
-        if (
-          receiver.data.online &&
-          receiver.data.activeConvo &&
-          receiver.data.activeConvo === conversation.id
-        ) {
+        console.log("line 40-----", receiver);
+        if (receiver.data && receiver.data.activeConvo === conversation.id) {
           const lastMessage = conversation.messages.filter((message) => {
             return message.senderId === user.id;
           });

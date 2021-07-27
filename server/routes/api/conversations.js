@@ -85,8 +85,8 @@ router.post("/new", async (req, res) => {
 });
 
 router.post("/getReceiver", async (req, res) => {
-  const data = await User.findByPk(req.body.userId);
-  const receiver = data.dataValues;
+  const receiver =
+    onlineUsers.find((user) => user.id === req.body.userId) || null;
   res.json(receiver);
 });
 
