@@ -9,9 +9,17 @@ router.post("/", async (req, res, next) => {
       return res.sendStatus(401);
     }
     const senderId = req.user.id;
-    const { recipientId, text, conversationId, sender, receiverHasRead } =
-      req.body;
+    const { recipientId, text, conversationId, sender } = req.body;
 
+    // checck to see if the receiver is online and seeing the same conversation
+
+    console.log("online Users-----", onlineUsers);
+    const recipient = onlineUsers.find((user) => user.id === recipientId);
+    const receiverHasRead =
+      recipient.activeConv && recipient.activeConv === conversationId
+        ? true
+        : false;
+    console.log(receiverHasRead);
     // if we already know conversation id, we can save time and just add it to message and return
     if (conversationId) {
       // check if user have permission to send message to the conversation
@@ -50,7 +58,7 @@ router.post("/", async (req, res, next) => {
       senderId,
       text,
       conversationId: conversation.id,
-      receiverHasRead: false,
+      receiverHasRead,
     });
     res.json({ message, sender });
   } catch (error) {
@@ -59,7 +67,12 @@ router.post("/", async (req, res, next) => {
 });
 
 router.post("/update", async (req, res) => {
-  const { messageIds } = req.body;
+  const { messageIds, userId, convoId } = req.body;
+  // first add users info to onlineUsers
+  const currentUser = onlineUsers.find((user) => user.id === userId);
+  if (currentUser) {
+    currentUser.activeConv = convoId;
+  }
   await Message.update(
     { receiverHasRead: true },
     {
@@ -69,7 +82,7 @@ router.post("/update", async (req, res) => {
     }
   );
 
-  return res.json("okay");
+  res.sendStatus(204);
 });
 
 module.exports = router;

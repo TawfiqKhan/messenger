@@ -36,4 +36,14 @@ router.get("/:username", async (req, res, next) => {
   }
 });
 
+// Route to set current users activeconv if visiting homepage or realoding the home page
+router.post("/edit", async (req, res, next) => {
+  const { userId } = req.body;
+  const currentUser = onlineUsers.find((user) => user.id === userId);
+  if (currentUser) {
+    currentUser.activeConv = null;
+  }
+  res.sendStatus(204);
+});
+
 module.exports = router;

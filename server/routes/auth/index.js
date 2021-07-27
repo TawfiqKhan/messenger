@@ -101,17 +101,5 @@ router.get("/user", (req, res, next) => {
     return res.json({});
   }
 });
-router.post("/user/edit", async (req, res, next) => {
-  const { userId, convoId } = req.body;
-  await User.update(
-    { activeConv: convoId },
-    {
-      where: {
-        id: userId,
-      },
-    }
-  );
-  res.sendStatus(204);
-});
 
 module.exports = router;
