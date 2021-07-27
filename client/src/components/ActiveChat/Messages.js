@@ -31,7 +31,6 @@ const useStyles = makeStyles(() => ({
 const Messages = (props) => {
   const classes = useStyles();
   const { messages, otherUser, userId, isTyping, lastMessage } = props;
-  // console.log("Last Messaggggggg", lastMessage);
   return (
     <Box>
       {messages

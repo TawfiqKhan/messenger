@@ -103,26 +103,27 @@ export const postMessage = (body) => async (dispatch) => {
     } else {
       dispatch(setNewMessage(data.message));
     }
-    console.log("Data----", data);
-    console.log("Body----", body);
     sendMessage(data, body);
   } catch (error) {
     console.error(error);
   }
 };
 
-export const updateMessages = (messageIds, convoId) => async (dispatch) => {
-  try {
-    //Update in DB
-    const data = await axios.post("/api/messages/update", {
-      messageIds: messageIds,
-    });
-    // update in State
-    dispatch(updateMessagesReadStatus(convoId));
-  } catch (error) {
-    console.error(error);
-  }
-};
+export const updateMessages =
+  (messageIds, userId, convoId) => async (dispatch) => {
+    try {
+      //Update in DB
+      const data = await axios.post("/api/messages/update", {
+        messageIds: messageIds,
+        userId: userId,
+        convoId: convoId,
+      });
+      // update in State
+      dispatch(updateMessagesReadStatus(convoId));
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
 export const searchUsers = (searchTerm) => async (dispatch) => {
   try {

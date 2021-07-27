@@ -8,14 +8,6 @@ const User = db.define("user", {
     unique: true,
     allowNull: false,
   },
-  online: {
-    type: Sequelize.BOOLEAN,
-    defaultValue: false,
-  },
-  activeConv: {
-    type: Sequelize.INTEGER,
-    defaultValue: 0,
-  },
   email: {
     type: Sequelize.STRING,
     unique: true,

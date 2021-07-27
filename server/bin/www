@@ -41,8 +41,6 @@ io.on("connection", (socket) => {
   });
 
   socket.on("new-message", (data) => {
-    console.log("new-message---data", data);
-    console.log(onlineUsers);
     socket.broadcast.emit("new-message", {
       message: data.message,
       sender: data.sender,
@@ -60,7 +58,6 @@ io.on("connection", (socket) => {
     const recipient = onlineUsers.filter(
       (user) => user.id === body.recipientId
     );
-    console.log("recipient---", recipient);
   });
 
   socket.on("update-messages", ({ convoId, otherUserId }) => {
@@ -68,7 +65,6 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("update-messages", { convoId, otherUserId });
   });
 
-  //This may be buggy- needs testing
   socket.on("logout", (id) => {
     if (onlineUsers.some((user) => user.id === id)) {
       userIndex = onlineUsers.indexOf(id);

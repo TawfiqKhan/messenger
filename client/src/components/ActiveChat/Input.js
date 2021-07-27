@@ -4,7 +4,6 @@ import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
 import { postMessage } from "../../store/utils/thunkCreators";
 import socket from "../../socket";
-import axios from "axios";
 
 const styles = {
   root: {
@@ -21,7 +20,7 @@ const styles = {
 
 function Input(props) {
   const [text, setText] = useState("");
-  const { classes, otherUser } = props;
+  const { classes } = props;
 
   const handleChange = async (event) => {
     const { value } = event.target;
@@ -43,26 +42,28 @@ function Input(props) {
       conversationId: props.conversationId,
       sender: props.conversationId ? null : props.user,
     };
-    // if other user is not online, save message as unread
-    if (!otherUser.online) {
-      let body = { ...reqBody, receiverHasRead: false };
-      await props.postMessage(body);
-      setText("");
-    } else {
-      // get recivers active conversation and set the reciverHasRead status based on that
-      const receiver = await axios.post("/api/conversations/getReceiver", {
-        userId: otherUser.id,
-      });
-      if (receiver.data.activeConv === props.conversationId) {
-        let body = { ...reqBody, receiverHasRead: true };
-        await props.postMessage(body);
-        setText("");
-      } else {
-        let body = { ...reqBody, receiverHasRead: false };
-        await props.postMessage(body);
-        setText("");
-      }
-    }
+    // // if other user is not online, save message as unread
+    // if (!otherUser.online) {
+    //   let body = { ...reqBody, receiverHasRead: false };
+    //   await props.postMessage(body);
+    //   setText("");
+    // } else {
+    //   // get recivers active conversation and set the reciverHasRead status based on that
+    //   const receiver = await axios.post("/api/conversations/getReceiver", {
+    //     userId: otherUser.id,
+    //   });
+    //   if (receiver.data.activeConv === props.conversationId) {
+    //     let body = { ...reqBody, receiverHasRead: true };
+    //     await props.postMessage(body);
+    //     setText("");
+    //   } else {
+    //     let body = { ...reqBody, receiverHasRead: false };
+    //     await props.postMessage(body);
+    //     setText("");
+    //   }
+    // }
+    await props.postMessage(reqBody);
+    setText("");
   };
 
   return (

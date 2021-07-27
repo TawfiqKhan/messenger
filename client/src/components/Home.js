@@ -23,7 +23,7 @@ const Home = (props) => {
       setIsLoggedIn(true);
     }
     if (isLoggedIn) {
-      axios.post("/auth/user/edit", {
+      axios.post("/api/users/edit", {
         userId: props.user.id,
         convoId: 0,
       });

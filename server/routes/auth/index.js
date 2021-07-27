@@ -18,7 +18,6 @@ router.post("/register", async (req, res, next) => {
         .status(400)
         .json({ error: "Password must be at least 6 characters" });
     }
-    console.log(req.body);
     const user = await User.create({ ...req.body, online: true });
     const token = jwt.sign(
       { id: user.dataValues.id },

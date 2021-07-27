@@ -12,14 +12,12 @@ router.post("/", async (req, res, next) => {
     const { recipientId, text, conversationId, sender } = req.body;
 
     // checck to see if the receiver is online and seeing the same conversation
-
-    console.log("online Users-----", onlineUsers);
     const recipient = onlineUsers.find((user) => user.id === recipientId);
     const receiverHasRead =
       recipient.activeConv && recipient.activeConv === conversationId
         ? true
         : false;
-    console.log(receiverHasRead);
+
     // if we already know conversation id, we can save time and just add it to message and return
     if (conversationId) {
       // check if user have permission to send message to the conversation

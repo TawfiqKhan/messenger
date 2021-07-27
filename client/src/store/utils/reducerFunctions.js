@@ -1,5 +1,4 @@
 export const addMessageToStore = (state, payload) => {
-  console.log("Payload----", payload);
   const { message, sender } = payload;
   // if sender isn't null, that means the message needs to be put in a brand new convo
   if (sender !== null) {
@@ -59,7 +58,6 @@ export const addTypingStatus = (state, payload) => {
 
 export const addOnlineUserToStore = (state, id) => {
   return state.map((convo) => {
-    console.log("Here-----");
     if (convo.otherUser.id === id) {
       const convoCopy = { ...convo };
       convoCopy.otherUser.online = true;

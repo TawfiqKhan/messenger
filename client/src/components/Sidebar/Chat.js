@@ -50,10 +50,10 @@ function Chat(props) {
   });
 
   const handleClick = async (conversation) => {
-    await axios.post("/auth/user/edit", {
-      userId: user.id,
-      convoId: conversation.id,
-    });
+    // await axios.post("/auth/user/edit", {
+    //   userId: user.id,
+    //   convoId: conversation.id,
+    // });
     await props.setActiveChat(conversation.otherUser.username);
 
     const unreadMessageIds = messages
@@ -62,9 +62,7 @@ function Chat(props) {
       )
       .map((message) => message.id);
 
-    await props.updateMessages(unreadMessageIds, conversation.id);
-    console.log("Update completed------");
-
+    await props.updateMessages(unreadMessageIds, user.id, conversation.id);
     socket.emit("update-messages", {
       convoId: conversation.id,
       otherUserId: otherUser.id,
@@ -97,8 +95,8 @@ const mapDispatchToProps = (dispatch) => {
     setActiveChat: (id) => {
       dispatch(setActiveChat(id));
     },
-    updateMessages: (messageIds, convoId) => {
-      dispatch(updateMessages(messageIds, convoId));
+    updateMessages: (messageIds, userId, convoId) => {
+      dispatch(updateMessages(messageIds, userId, convoId));
     },
   };
 };
