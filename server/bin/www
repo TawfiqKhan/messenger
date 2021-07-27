@@ -33,8 +33,8 @@ const io = require("socket.io")(server);
 
 io.on("connection", (socket) => {
   socket.on("go-online", (id) => {
-    if (!onlineUsers.includes(id)) {
-      onlineUsers.push(id);
+    if (!onlineUsers.some((user) => user.id === id)) {
+      onlineUsers.push({ id });
     }
     // send the user who just went online to everyone else who is already online
     socket.broadcast.emit("add-online-user", id);
@@ -42,6 +42,7 @@ io.on("connection", (socket) => {
 
   socket.on("new-message", (data) => {
     console.log("new-message---data", data);
+    console.log(onlineUsers);
     socket.broadcast.emit("new-message", {
       message: data.message,
       sender: data.sender,
@@ -56,7 +57,9 @@ io.on("connection", (socket) => {
   });
 
   socket.on("sending-message", (body) => {
-    const recipient = onlineUsers.filter((id) => id === body.recipientId);
+    const recipient = onlineUsers.filter(
+      (user) => user.id === body.recipientId
+    );
     console.log("recipient---", recipient);
   });
 
@@ -65,6 +68,7 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("update-messages", { convoId, otherUserId });
   });
 
+  //This may be buggy- needs testing
   socket.on("logout", (id) => {
     if (onlineUsers.some((user) => user.id === id)) {
       userIndex = onlineUsers.indexOf(id);
