@@ -18,9 +18,15 @@ const styles = {
     marginBottom: 10,
     display: "flex",
     alignItems: "center",
-    justifyContent: "space-between",
     "&:hover": {
       cursor: "grab",
+    },
+  },
+  badge: {
+    marginRight: 25,
+    "& span": {
+      fontWeight: 600,
+      padding: 7,
     },
   },
 };
@@ -74,13 +80,15 @@ function Chat(props) {
     >
       <BadgeAvatar
         photoUrl={otherUser.photoUrl}
-        // username={`${otherUser.username}---H`}
         online={otherUser.online}
         sidebar={true}
       />
       <ChatContent conversation={props.conversation} />
-      {/* <div>{`${totalUnread(messages)}`}</div> */}
-      <Badge badgeContent={totalUnread} color="primary"></Badge>
+      <Badge
+        className={classes.badge}
+        badgeContent={totalUnread}
+        color="primary"
+      ></Badge>
     </Box>
   );
 }

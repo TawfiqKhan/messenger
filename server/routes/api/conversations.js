@@ -62,7 +62,7 @@ router.get("/", async (req, res, next) => {
       }
 
       // set property for online status of the other user
-      if (onlineUsers.some((user) => user.id === convoJSON.otherUser.id)) {
+      if (onlineUsers.includes(convoJSON.otherUser.id)) {
         convoJSON.otherUser.online = true;
       } else {
         convoJSON.otherUser.online = false;
@@ -80,27 +80,12 @@ router.get("/", async (req, res, next) => {
 });
 
 router.post("/new", async (req, res) => {
-  // res.send(req.body.id);
   const conversation = await Conversation.updateConversation(req.body.id);
-  // Conversation.update({
-  //   test: "just Testing",
-  // });
-  // console.log(conversation);
   res.send(conversation);
-});
-
-router.post("/recipientData", async (req, res) => {
-  console.log("Reached route", req.body.recipientId);
-  const [recipient] = onlineUsers.filter(
-    (user) => user.id === req.body.recipientId
-  );
-  console.log("sending this data----", recipient);
-  res.send(recipient);
 });
 
 router.post("/getReceiver", async (req, res) => {
   const data = await User.findByPk(req.body.userId);
-  // res.send(data.dataValues.activeConv);
   const receiver = data.dataValues;
   res.json(receiver);
 });
