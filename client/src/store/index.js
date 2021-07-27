@@ -27,10 +27,8 @@ const rootReducer = (state, action) => {
   return appReducer(state, action);
 };
 
-// export default createStore(rootReducer, applyMiddleware(thunkMiddleware, loggerMiddleware));
 const store = createStore(
   rootReducer,
   applyMiddleware(thunkMiddleware, loggerMiddleware)
 );
-store.subscribe(() => console.log(store.getState()));
 export default store;

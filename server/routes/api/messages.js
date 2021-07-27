@@ -58,7 +58,6 @@ router.post("/", async (req, res, next) => {
 });
 
 router.post("/update", async (req, res) => {
-  console.log("Reached here in message routee", req.body);
   await Message.update(
     { receiverHasRead: true },
     {

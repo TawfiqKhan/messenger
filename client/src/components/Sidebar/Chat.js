@@ -6,6 +6,7 @@ import { BadgeAvatar, ChatContent } from "../Sidebar";
 import { withStyles } from "@material-ui/core/styles";
 import { Badge } from "@material-ui/core";
 import { setActiveChat } from "../../store/activeConversation";
+import { updateMessages } from "../../store/utils/thunkCreators";
 import { connect } from "react-redux";
 import socket from "../../socket";
 
@@ -29,7 +30,11 @@ const styles = {
 // if online but conversation is not active chat then unread status false
 
 function Chat(props) {
-  const [totalUnread, setTotalUnread] = useState(5);
+  const [totalUnread, setTotalUnread] = useState(0);
+
+  const { classes, user } = props;
+  const { otherUser, messages } = props.conversation;
+
   useEffect(() => {
     const unreadMessages = messages.filter(
       (message) =>
@@ -37,19 +42,47 @@ function Chat(props) {
     );
     setTotalUnread(unreadMessages.length);
   });
+
   const handleClick = async (conversation) => {
     await axios.post("/auth/user/edit", {
-      userId: props.user.id,
+      userId: user.id,
       convoId: conversation.id,
     });
     await props.setActiveChat(conversation.otherUser.username);
 
+    const unreadMessages = messages
+      .filter(
+        (message) => message.senderId !== user.id && !message.receiverHasRead
+      )
+      .map((message) => message.id);
+
+    await props.updateMessages(unreadMessages, conversation.id);
+    console.log("Update completed------");
+
+    socket.emit("update-messages", {
+      convoId: conversation.id,
+      otherUserId: otherUser.id,
+    });
+    console.log(unreadMessages.length);
+
+    //   const updateReceivedMessages = async () => {
+    //     if (messages) {
+    //       const receivedMessages = messages
+    //         .filter(
+    //           (message) =>
+    //             message.senderId !== user.id && !message.receiverHasRead
+    //         )
+    //         .map((message) => message.id);
+    //       console.log("line 76----", conversation.id);
+    //       await props.updateMessages(receivedMessages, conversation.id);
+    //       socket.emit("update-messages", { convoId: conversation.id });
+    //     }
+    //   };
+    //   updateReceivedMessages();
+
     setTotalUnread(0);
   };
 
-  const { otherUser, messages } = props.conversation;
-
-  const { classes } = props;
   return (
     <Box
       onClick={() => handleClick(props.conversation)}
@@ -72,6 +105,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     setActiveChat: (id) => {
       dispatch(setActiveChat(id));
+    },
+    updateMessages: (messages, convoId) => {
+      dispatch(updateMessages(messages, convoId));
     },
   };
 };

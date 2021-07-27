@@ -27,12 +27,7 @@ const useStyles = makeStyles(() => ({
 // lets first get all the messages where user is not sender
 
 const ActiveChat = (props) => {
-  // const [conversationId, setConversationId] = useState(null);
-  // const [checkOtherUser, setCheckOtherUser] = useState(false);
-  const [lastReadMessage, setLastReadMessage] = useState({
-    id: 30,
-    text: " Hello",
-  });
+  const [lastReadMessage, setLastReadMessage] = useState({});
   const classes = useStyles();
   const { user } = props;
   const conversation = props.conversation || {};
@@ -52,7 +47,6 @@ const ActiveChat = (props) => {
           const lastMessage = conversation.messages.filter((message) => {
             return message.senderId === user.id;
           });
-          // console.log("Last message-----", lastMessage);
           setLastReadMessage(lastMessage[lastMessage.length - 1]);
         } else {
           const lastMessage = messages.filter(
@@ -63,23 +57,6 @@ const ActiveChat = (props) => {
       })();
     }
   });
-
-  useEffect(() => {
-    const updateReceivedMessages = async () => {
-      if (messages) {
-        const receivedMessages = messages
-          .filter(
-            (message) =>
-              message.senderId !== user.id && !message.receiverHasRead
-          )
-          .map((message) => message.id);
-        console.log("line 76----", conversation.id);
-        await props.updateMessages(receivedMessages, conversation.id);
-        socket.emit("update-messages", { convoId: conversation.id });
-      }
-    };
-    updateReceivedMessages();
-  }, [conversation.id]);
 
   return (
     <Box className={classes.root}>

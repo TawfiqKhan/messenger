@@ -101,7 +101,6 @@ router.post("/recipientData", async (req, res) => {
 router.post("/getReceiver", async (req, res) => {
   const data = await User.findByPk(req.body.userId);
   // res.send(data.dataValues.activeConv);
-  console.log("line 104", data.dataValues.activeConv);
   const receiver = data.dataValues;
   res.json(receiver);
 });

@@ -66,9 +66,9 @@ io.on("connection", (socket) => {
     console.log("recipient---", recipient);
   });
 
-  socket.on("update-messages", (convoId) => {
-    console.log("Inside socket----");
-    socket.broadcast.emit("update-messages", { convoId: convoId });
+  socket.on("update-messages", ({ convoId, otherUserId }) => {
+    console.log("Inside socket----", { convoId, otherUserId });
+    socket.broadcast.emit("update-messages", { convoId, otherUserId });
   });
 
   socket.on("logout", (id) => {

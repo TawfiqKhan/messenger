@@ -1,4 +1,3 @@
-import React, { Component } from "react";
 import { useState } from "react";
 import { FormControl, FilledInput } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
@@ -33,8 +32,7 @@ function Input(props) {
       conversationId: props.conversationId,
       sender: props.conversationId ? null : props.user,
     };
-    socket.emit("typing-test", { reqBody });
-    // await props.showTypingStatus(reqBody);
+    socket.emit("started-typing", { reqBody });
   };
 
   const handleSubmit = async (event) => {
