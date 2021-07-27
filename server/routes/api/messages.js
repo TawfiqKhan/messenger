@@ -12,11 +12,10 @@ router.post("/", async (req, res, next) => {
     const { recipientId, text, conversationId, sender } = req.body;
 
     // checck to see if the receiver is online and seeing the same conversation
-    const recipient = onlineUsers.find((user) => user.id === recipientId);
+    const recipient =
+      onlineUsers.find((user) => user.id === recipientId) || null;
     const receiverHasRead =
-      recipient.activeConv && recipient.activeConv === conversationId
-        ? true
-        : false;
+      recipient && recipient.activeConv === conversationId ? true : false;
 
     // if we already know conversation id, we can save time and just add it to message and return
     if (conversationId) {

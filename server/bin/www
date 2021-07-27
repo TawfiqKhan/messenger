@@ -61,16 +61,13 @@ io.on("connection", (socket) => {
   });
 
   socket.on("update-messages", ({ convoId, otherUserId }) => {
-    console.log("Inside socket----", { convoId, otherUserId });
     socket.broadcast.emit("update-messages", { convoId, otherUserId });
   });
 
   socket.on("logout", (id) => {
-    if (onlineUsers.some((user) => user.id === id)) {
-      userIndex = onlineUsers.indexOf(id);
-      onlineUsers.splice(userIndex, 1);
-      socket.broadcast.emit("remove-offline-user", id);
-    }
+    userIndex = onlineUsers.findIndex((user) => user.id === id);
+    onlineUsers.splice(userIndex, 1);
+    socket.broadcast.emit("remove-offline-user", id);
   });
 });
 
