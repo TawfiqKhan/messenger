@@ -3,7 +3,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Box } from "@material-ui/core";
 import { Input, Header, Messages } from "./index";
 import { connect } from "react-redux";
-import { updateMessages } from "../../store/utils/thunkCreators";
 import axios from "axios";
 
 const useStyles = makeStyles(() => ({
@@ -97,11 +96,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    updateMessages: (messages, convoId) => {
-      dispatch(updateMessages(messages, convoId));
-    },
-  };
-};
-export default connect(mapStateToProps, mapDispatchToProps)(ActiveChat);
+export default connect(mapStateToProps, null)(ActiveChat);

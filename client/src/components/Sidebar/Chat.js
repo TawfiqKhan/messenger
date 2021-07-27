@@ -56,20 +56,19 @@ function Chat(props) {
     });
     await props.setActiveChat(conversation.otherUser.username);
 
-    const unreadMessages = messages
+    const unreadMessageIds = messages
       .filter(
         (message) => message.senderId !== user.id && !message.receiverHasRead
       )
       .map((message) => message.id);
 
-    await props.updateMessages(unreadMessages, conversation.id);
+    await props.updateMessages(unreadMessageIds, conversation.id);
     console.log("Update completed------");
 
     socket.emit("update-messages", {
       convoId: conversation.id,
       otherUserId: otherUser.id,
     });
-    console.log(unreadMessages.length);
     setTotalUnread(0);
   };
 
@@ -98,8 +97,8 @@ const mapDispatchToProps = (dispatch) => {
     setActiveChat: (id) => {
       dispatch(setActiveChat(id));
     },
-    updateMessages: (messages, convoId) => {
-      dispatch(updateMessages(messages, convoId));
+    updateMessages: (messageIds, convoId) => {
+      dispatch(updateMessages(messageIds, convoId));
     },
   };
 };

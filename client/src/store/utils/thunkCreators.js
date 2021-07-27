@@ -49,9 +49,7 @@ export const register = (credentials) => async (dispatch) => {
 export const login = (credentials) => async (dispatch) => {
   try {
     const { data } = await axios.post("/auth/login", credentials);
-    console.log("After Login-----", data);
     await localStorage.setItem("messenger-token", data.token);
-    // await axios.delete("/auth/logout");
     dispatch(gotUser(data));
     socket.emit("go-online", data.id);
   } catch (error) {
@@ -61,7 +59,6 @@ export const login = (credentials) => async (dispatch) => {
 };
 
 export const logout = (id) => async (dispatch) => {
-  console.log("ID:::::::", id);
   try {
     await axios.delete("/auth/logout", { data: { id } });
     await localStorage.removeItem("messenger-token");
@@ -113,11 +110,11 @@ export const postMessage = (body) => async (dispatch) => {
   }
 };
 
-export const updateMessages = (messages, convoId) => async (dispatch) => {
+export const updateMessages = (messageIds, convoId) => async (dispatch) => {
   try {
     //Update in DB
     const data = await axios.post("/api/messages/update", {
-      messages: messages,
+      messageIds: messageIds,
     });
     // update in State
     dispatch(updateMessagesReadStatus(convoId));

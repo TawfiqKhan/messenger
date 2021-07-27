@@ -31,14 +31,9 @@ socket.on("connect", () => {
   });
 
   socket.on("update-messages", ({ convoId, otherUserId }) => {
-    console.log("first log");
-    console.log("now sender needs to update-----", convoId, otherUserId);
-    // console.log("user----", user.id);
-    // console.log("otherUser----", otherUserId);
     if (user.id === otherUserId) {
       store.dispatch(updateMessagesReadStatus(convoId));
     }
-    // store.dispatch(updateMessagesReadStatus(convoId));
   });
 
   socket.on("started-typing", ({ body }) => {
