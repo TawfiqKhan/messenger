@@ -42,7 +42,7 @@ router.post("/", async (req, res, next) => {
         user1Id: senderId,
         user2Id: recipientId,
       });
-      if (onlineUsers.includes(sender.id)) {
+      if (!onlineUsers.includes(sender.id)) {
         sender.online = true;
       }
     }
@@ -58,11 +58,12 @@ router.post("/", async (req, res, next) => {
 });
 
 router.post("/update", async (req, res) => {
+  const { messageIds } = req.body;
   await Message.update(
     { receiverHasRead: true },
     {
       where: {
-        id: req.body.messages,
+        id: messageIds,
       },
     }
   );

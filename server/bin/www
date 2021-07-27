@@ -33,7 +33,7 @@ const io = require("socket.io")(server);
 
 io.on("connection", (socket) => {
   socket.on("go-online", (id) => {
-    if (onlineUsers.includes(id)) {
+    if (!onlineUsers.includes(id)) {
       onlineUsers.push(id);
     }
     // send the user who just went online to everyone else who is already online
@@ -56,9 +56,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("sending-message", (body) => {
-    const recipient = onlineUsers.filter(
-      (user) => user.id === body.recipientId
-    );
+    const recipient = onlineUsers.filter((id) => id === body.recipientId);
     console.log("recipient---", recipient);
   });
 
@@ -68,7 +66,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("logout", (id) => {
-    if (onlineUsers.includes(id)) {
+    if (onlineUsers.some((user) => user.id === id)) {
       userIndex = onlineUsers.indexOf(id);
       onlineUsers.splice(userIndex, 1);
       socket.broadcast.emit("remove-offline-user", id);
