@@ -4,7 +4,6 @@ import { Box } from "@material-ui/core";
 import { Input, Header, Messages } from "./index";
 import { connect } from "react-redux";
 import { updateMessages } from "../../store/utils/thunkCreators";
-import socket from "../../socket";
 import axios from "axios";
 
 const useStyles = makeStyles(() => ({

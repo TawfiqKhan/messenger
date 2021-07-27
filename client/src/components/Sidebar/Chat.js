@@ -64,22 +64,6 @@ function Chat(props) {
       otherUserId: otherUser.id,
     });
     console.log(unreadMessages.length);
-
-    //   const updateReceivedMessages = async () => {
-    //     if (messages) {
-    //       const receivedMessages = messages
-    //         .filter(
-    //           (message) =>
-    //             message.senderId !== user.id && !message.receiverHasRead
-    //         )
-    //         .map((message) => message.id);
-    //       console.log("line 76----", conversation.id);
-    //       await props.updateMessages(receivedMessages, conversation.id);
-    //       socket.emit("update-messages", { convoId: conversation.id });
-    //     }
-    //   };
-    //   updateReceivedMessages();
-
     setTotalUnread(0);
   };
 

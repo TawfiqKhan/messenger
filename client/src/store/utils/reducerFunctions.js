@@ -1,5 +1,3 @@
-import { updateMessages } from "./thunkCreators";
-
 export const addMessageToStore = (state, payload) => {
   const { message, sender } = payload;
   // if sender isn't null, that means the message needs to be put in a brand new convo

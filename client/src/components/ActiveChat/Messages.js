@@ -2,13 +2,7 @@ import React from "react";
 // import { Box } from "@material-ui/core";
 import { SenderBubble, OtherUserBubble } from "../ActiveChat";
 import { makeStyles } from "@material-ui/core/styles";
-import {
-  Box,
-  Typography,
-  Avatar,
-  CircularProgress,
-  Divider,
-} from "@material-ui/core";
+import { Box, Typography, Avatar, CircularProgress } from "@material-ui/core";
 import moment from "moment";
 
 const useStyles = makeStyles(() => ({
