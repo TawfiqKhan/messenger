@@ -123,12 +123,6 @@ export const updateMessages = (messageIds, convoId) => async (dispatch) => {
     console.error(error);
   }
 };
-export const getRecipientData = (convoId, recipientId) => async (dispatch) => {
-  const { data } = await axios.post("/api/conversations/recipientData", {
-    recipientId: recipientId,
-  });
-  dispatch(addOtherUserActiveChat(convoId, data));
-};
 
 export const searchUsers = (searchTerm) => async (dispatch) => {
   try {

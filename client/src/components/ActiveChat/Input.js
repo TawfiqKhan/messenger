@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FormControl, FilledInput } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
-import { postMessage, getRecipientData } from "../../store/utils/thunkCreators";
+import { postMessage } from "../../store/utils/thunkCreators";
 import socket from "../../socket";
 import axios from "axios";
 
@@ -92,9 +92,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
     postMessage: (message) => {
       dispatch(postMessage(message));
-    },
-    getRecipientData: (convoId, recipientId) => {
-      dispatch(getRecipientData(convoId, recipientId));
     },
   };
 };

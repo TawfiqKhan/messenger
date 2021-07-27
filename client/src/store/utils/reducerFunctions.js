@@ -57,22 +57,6 @@ export const addTypingStatus = (state, payload) => {
   });
 };
 
-export const addOtherUserActiveChatToStore = (state, payload) => {
-  const { convoId, recipientData } = payload;
-  return state.map((convo) => {
-    if (convo.id === convoId) {
-      const convoCopy = { ...convo };
-      convoCopy.otherUser = {
-        ...convo.otherUser,
-        activeConvo: recipientData.convoId || null,
-      };
-      return convoCopy;
-    } else {
-      return convo;
-    }
-  });
-};
-
 export const addOnlineUserToStore = (state, id) => {
   return state.map((convo) => {
     console.log("Here-----");
