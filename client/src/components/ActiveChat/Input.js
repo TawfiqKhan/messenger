@@ -42,26 +42,6 @@ function Input(props) {
       conversationId: props.conversationId,
       sender: props.conversationId ? null : props.user,
     };
-    // // if other user is not online, save message as unread
-    // if (!otherUser.online) {
-    //   let body = { ...reqBody, receiverHasRead: false };
-    //   await props.postMessage(body);
-    //   setText("");
-    // } else {
-    //   // get recivers active conversation and set the reciverHasRead status based on that
-    //   const receiver = await axios.post("/api/conversations/getReceiver", {
-    //     userId: otherUser.id,
-    //   });
-    //   if (receiver.data.activeConv === props.conversationId) {
-    //     let body = { ...reqBody, receiverHasRead: true };
-    //     await props.postMessage(body);
-    //     setText("");
-    //   } else {
-    //     let body = { ...reqBody, receiverHasRead: false };
-    //     await props.postMessage(body);
-    //     setText("");
-    //   }
-    // }
     await props.postMessage(reqBody);
     setText("");
   };
