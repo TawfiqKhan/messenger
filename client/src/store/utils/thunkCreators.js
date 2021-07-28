@@ -60,7 +60,7 @@ export const login = (credentials) => async (dispatch) => {
 
 export const logout = (id) => async (dispatch) => {
   try {
-    await axios.delete("/auth/logout", { data: { id } });
+    await axios.delete("/auth/logout");
     await localStorage.removeItem("messenger-token");
     dispatch(gotUser({}));
     socket.emit("logout", id);
@@ -110,13 +110,15 @@ export const postMessage = (body) => async (dispatch) => {
 };
 
 export const updateMessages =
-  (messageIds, userId, convoId) => async (dispatch) => {
+  (messageIds, userId, convoId, otherUserId) => async (dispatch) => {
+    // console.log("114----", conversation);
     try {
       //Update in DB
-      const data = await axios.post("/api/messages/update", {
+      const data = await axios.put("/api/messages/update", {
         messageIds: messageIds,
         userId: userId,
         convoId: convoId,
+        otherUserId: otherUserId,
       });
       // update in State
       dispatch(updateMessagesReadStatus(convoId));

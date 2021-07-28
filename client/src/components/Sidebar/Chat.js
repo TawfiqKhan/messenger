@@ -50,24 +50,27 @@ function Chat(props) {
   });
 
   const handleClick = async (conversation) => {
-    // await axios.post("/auth/user/edit", {
-    //   userId: user.id,
-    //   convoId: conversation.id,
-    // });
     await props.setActiveChat(conversation.otherUser.username);
+    // if it is not a new conversation, only then send update request
+    if (conversation.id) {
+      const unreadMessageIds = messages
+        .filter(
+          (message) => message.senderId !== user.id && !message.receiverHasRead
+        )
+        .map((message) => message.id);
 
-    const unreadMessageIds = messages
-      .filter(
-        (message) => message.senderId !== user.id && !message.receiverHasRead
-      )
-      .map((message) => message.id);
-
-    await props.updateMessages(unreadMessageIds, user.id, conversation.id);
-    socket.emit("update-messages", {
-      convoId: conversation.id,
-      otherUserId: otherUser.id,
-    });
-    setTotalUnread(0);
+      await props.updateMessages(
+        unreadMessageIds,
+        user.id,
+        conversation.id,
+        otherUser.id
+      );
+      socket.emit("update-messages", {
+        convoId: conversation.id,
+        otherUserId: otherUser.id,
+      });
+      setTotalUnread(0);
+    }
   };
 
   return (
@@ -98,8 +101,8 @@ const mapDispatchToProps = (dispatch) => {
     setActiveChat: (id) => {
       dispatch(setActiveChat(id));
     },
-    updateMessages: (messageIds, userId, convoId) => {
-      dispatch(updateMessages(messageIds, userId, convoId));
+    updateMessages: (messageIds, userId, convoId, otherUserId) => {
+      dispatch(updateMessages(messageIds, userId, convoId, otherUserId));
     },
   };
 };

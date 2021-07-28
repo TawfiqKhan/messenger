@@ -63,23 +63,34 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-router.post("/update", async (req, res) => {
-  const { messageIds, userId, convoId } = req.body;
+router.put("/update", async (req, res) => {
+  const { messageIds, userId, convoId, otherUserId } = req.body;
   // first add users info to onlineUsers
   const currentUser = onlineUsers.find((user) => user.id === userId);
   if (currentUser) {
     currentUser.activeConv = convoId;
   }
-  await Message.update(
-    { receiverHasRead: true },
-    {
-      where: {
-        id: messageIds,
-      },
-    }
-  );
-
-  res.sendStatus(204);
+  // check if the user is part of the conversation
+  let conversation = await Conversation.getConversation(convoId);
+  if (conversation.user2Id === userId || conversation.user1Id === userId) {
+    // if yes then only update the received messages
+    await Message.update(
+      { receiverHasRead: true },
+      {
+        where: [
+          {
+            id: messageIds,
+          },
+          {
+            senderId: otherUserId,
+          },
+        ],
+      }
+    );
+    return res.sendStatus(204);
+  } else {
+    return res.sendStatus(403);
+  }
 });
 
 module.exports = router;
