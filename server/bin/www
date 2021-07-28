@@ -31,18 +31,6 @@ const server = http.createServer(app);
 
 const io = require("socket.io")(server);
 
-// io.on("connection", (socket) => {
-//   socket.on("go-online", (id) => {
-//     let user = onlineUsers.find((user) => user.id === id);
-//     if (!onlineUsers.id) {
-//       onlineUsers.push({ id, activeConv: null, socket_id: socket.id });
-//       // send the user who just went online to everyone else who is already online
-//       socket.broadcast.emit("add-online-user", id);
-//     } else {
-//       // this is a edge case where if the user is online but reloads his browser
-//       user.socket_id = socket.id;
-//     }
-//   });
 io.on("connection", (socket) => {
   socket.on("go-online", (id) => {
     if (!onlineUsers[id]) {
@@ -53,7 +41,6 @@ io.on("connection", (socket) => {
       // this is a edge case where if the user is online but reloads his browser
       onlineUsers[id].socket_id = socket.id;
     }
-    console.log("line 56----", onlineUsers);
   });
 
   socket.on("new-message", (data) => {
@@ -80,13 +67,20 @@ io.on("connection", (socket) => {
 
   socket.on("update-messages", ({ convoId, otherUserId }) => {
     const intendedReceiver = findReceiver(otherUserId);
-    console.log(intendedReceiver);
-    socket.broadcast.emit("update-messages", { convoId, otherUserId });
+    // only send update event if they reciver is online, else their messages will update once they sign back in.
+    if (intendedReceiver) {
+      io.to(intendedReceiver.socket_id).emit("update-messages", {
+        convoId,
+        otherUserId,
+      });
+    }
   });
 
-  socket.on("logout", (id) => {
-    userIndex = onlineUsers.findIndex((user) => user.id === id);
-    onlineUsers.splice(userIndex, 1);
+  socket.on("logout", (id, socket_id) => {
+    // condition preventing unauthorized users to log someone else out
+    if (onlineUsers[id] && onlineUsers[id].socket_id) {
+      delete onlineUsers[id];
+    }
     socket.broadcast.emit("remove-offline-user", id);
   });
 });

@@ -13,7 +13,6 @@ router.post("/", async (req, res, next) => {
 
     // checck to see if the receiver is online and seeing the same conversation
     const recipient = onlineUsers[recipientId] || null;
-    console.log("recipient----", recipient);
     const receiverHasRead =
       recipient && recipient.activeConv === conversationId ? true : false;
 
