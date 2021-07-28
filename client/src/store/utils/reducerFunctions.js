@@ -24,11 +24,44 @@ export const addMessageToStore = (state, payload) => {
   });
 };
 
+export const updateMessagesInStore = (state, { convoId }) => {
+  return state.map((convo) => {
+    if (convo.id === convoId) {
+      const convoCopy = { ...convo };
+      const updatedMessages = convoCopy.messages.map((message) => {
+        if (!message.receiverHasRead) {
+          return { ...message, receiverHasRead: true };
+        } else {
+          return message;
+        }
+      });
+      convoCopy.messages = updatedMessages;
+      return convoCopy;
+    } else {
+      return convo;
+    }
+  });
+};
+
+export const addTypingStatus = (state, payload) => {
+  const { conversation, isTyping } = payload;
+  return state.map((convo) => {
+    if (convo.id === conversation.conversationId) {
+      const convoCopy = { ...convo };
+      convoCopy.isTyping = isTyping;
+      return convoCopy;
+    } else {
+      return convo;
+    }
+  });
+};
+
 export const addOnlineUserToStore = (state, id) => {
   return state.map((convo) => {
     if (convo.otherUser.id === id) {
       const convoCopy = { ...convo };
       convoCopy.otherUser.online = true;
+      convoCopy.otherUser.testing = "Yes";
       return convoCopy;
     } else {
       return convo;

@@ -5,6 +5,8 @@ import {
   addConversation,
   setNewMessage,
   setSearchedUsers,
+  addOtherUserActiveChat,
+  updateMessagesReadStatus,
 } from "../conversations";
 import { gotUser, setFetchingStatus } from "../user";
 
@@ -84,13 +86,13 @@ const saveMessage = async (body) => {
 };
 
 const sendMessage = (data, body) => {
+  // This listener is for sender who is emiting that he sent a message, he has updated the state(line 105) before sending this emit
   socket.emit("new-message", {
     message: data.message,
     recipientId: body.recipientId,
     sender: data.sender,
   });
 };
-
 // message format to send: {recipientId, text, conversationId}
 // conversationId will be set to null if its a brand new conversation
 export const postMessage = (body) => async (dispatch) => {
@@ -101,12 +103,29 @@ export const postMessage = (body) => async (dispatch) => {
     } else {
       dispatch(setNewMessage(data.message));
     }
-
     sendMessage(data, body);
   } catch (error) {
     console.error(error);
   }
 };
+
+export const updateMessages =
+  (messageIds, userId, convoId, otherUserId) => async (dispatch) => {
+    // console.log("114----", conversation);
+    try {
+      //Update in DB
+      const data = await axios.put("/api/messages/update", {
+        messageIds: messageIds,
+        userId: userId,
+        convoId: convoId,
+        otherUserId: otherUserId,
+      });
+      // update in State
+      dispatch(updateMessagesReadStatus(convoId));
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
 export const searchUsers = (searchTerm) => async (dispatch) => {
   try {

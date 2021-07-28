@@ -18,9 +18,7 @@ router.post("/register", async (req, res, next) => {
         .status(400)
         .json({ error: "Password must be at least 6 characters" });
     }
-
     const user = await User.create(req.body);
-
     const token = jwt.sign(
       { id: user.dataValues.id },
       process.env.SESSION_SECRET,
@@ -74,7 +72,7 @@ router.post("/login", async (req, res, next) => {
   }
 });
 
-router.delete("/logout", (req, res, next) => {
+router.delete("/logout", async (req, res, next) => {
   res.sendStatus(204);
 });
 

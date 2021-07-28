@@ -11,6 +11,12 @@ router.post("/", async (req, res, next) => {
     const senderId = req.user.id;
     const { recipientId, text, conversationId, sender } = req.body;
 
+    // checck to see if the receiver is online and seeing the same conversation
+    const recipient =
+      onlineUsers.find((user) => user.id === recipientId) || null;
+    const receiverHasRead =
+      recipient && recipient.activeConv === conversationId ? true : false;
+
     // if we already know conversation id, we can save time and just add it to message and return
     if (conversationId) {
       // check if user have permission to send message to the conversation
@@ -23,6 +29,7 @@ router.post("/", async (req, res, next) => {
           senderId,
           text,
           conversationId,
+          receiverHasRead,
         });
         return res.json({ message, sender });
       } else {
@@ -34,14 +41,13 @@ router.post("/", async (req, res, next) => {
       senderId,
       recipientId
     );
-
     if (!conversation) {
       // create conversation
       conversation = await Conversation.create({
         user1Id: senderId,
         user2Id: recipientId,
       });
-      if (onlineUsers.includes(sender.id)) {
+      if (onlineUsers.some((user) => user.id === sender.id)) {
         sender.online = true;
       }
     }
@@ -49,10 +55,41 @@ router.post("/", async (req, res, next) => {
       senderId,
       text,
       conversationId: conversation.id,
+      receiverHasRead,
     });
     res.json({ message, sender });
   } catch (error) {
     next(error);
+  }
+});
+
+router.put("/update", async (req, res) => {
+  const { messageIds, userId, convoId, otherUserId } = req.body;
+  // first add users info to onlineUsers
+  const currentUser = onlineUsers.find((user) => user.id === userId);
+  if (currentUser) {
+    currentUser.activeConv = convoId;
+  }
+  // check if the user is part of the conversation
+  let conversation = await Conversation.getConversation(convoId);
+  if (conversation.user2Id === userId || conversation.user1Id === userId) {
+    // if yes then only update the received messages
+    await Message.update(
+      { receiverHasRead: true },
+      {
+        where: [
+          {
+            id: messageIds,
+          },
+          {
+            senderId: otherUserId,
+          },
+        ],
+      }
+    );
+    return res.sendStatus(204);
+  } else {
+    return res.sendStatus(403);
   }
 });
 

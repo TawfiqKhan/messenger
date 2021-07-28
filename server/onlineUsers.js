@@ -1,2 +1,2 @@
-const onlineUsers = [];
+let onlineUsers = [];
 module.exports = onlineUsers;
