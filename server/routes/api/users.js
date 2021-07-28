@@ -25,7 +25,7 @@ router.get("/:username", async (req, res, next) => {
     // add online status to each user that is online
     for (let i = 0; i < users.length; i++) {
       const userJSON = users[i].toJSON();
-      if (onlineUsers.some((user) => user.id === userJSON.id)) {
+      if (onlineUsers[userJSON.id]) {
         userJSON.online = true;
       }
       users[i] = userJSON;
@@ -39,7 +39,7 @@ router.get("/:username", async (req, res, next) => {
 // Route to set current users activeconv if visiting homepage or realoding the home page
 router.post("/edit", async (req, res, next) => {
   const { userId } = req.body;
-  const currentUser = onlineUsers.find((user) => user.id === userId);
+  const currentUser = onlineUsers[userId] || null;
   if (currentUser) {
     currentUser.activeConv = null;
   }
