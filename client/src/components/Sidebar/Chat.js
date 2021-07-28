@@ -80,7 +80,10 @@ function Chat(props) {
         online={otherUser.online}
         sidebar={true}
       />
-      <ChatContent conversation={props.conversation} />
+      <ChatContent
+        conversation={props.conversation}
+        totalUnread={totalUnread}
+      />
       <Badge
         className={classes.badge}
         badgeContent={totalUnread}
