@@ -41,9 +41,6 @@ socket.on("started-typing", ({ body }) => {
   }, 1000);
 });
 
-socket.on("authenticated", (data) => {
-  console.log(`Autheticated!!!!`);
-});
 socket.on("unauthorized", (msg) => {
   console.log(`unauthorized: ${JSON.stringify(msg.data)}`);
   throw new Error(msg.data.type);
@@ -52,9 +49,7 @@ socket.on("unauthorized", (msg) => {
 // Handling token expiration
 socket.on("connect_error", (error) => {
   console.log("error----", error);
-});
-socket.on("messages", (data) => {
-  console.log(data);
+  throw new Error(error);
 });
 
 export default socket;
