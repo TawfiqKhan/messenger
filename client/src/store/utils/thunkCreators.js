@@ -25,12 +25,7 @@ export const fetchUser = () => async (dispatch) => {
     const { data } = await axios.get("/auth/user");
     dispatch(gotUser(data));
     if (data.id) {
-      const token = localStorage.getItem("messenger-token");
-      socket.io.opts.query = {
-        token: token,
-      };
-      socket.connect();
-      socket.emit("go-online", data.id);
+      createConnection(socket, data);
     }
   } catch (error) {
     console.error(error);
@@ -44,11 +39,7 @@ export const register = (credentials) => async (dispatch) => {
     const { data } = await axios.post("/auth/register", credentials);
     await localStorage.setItem("messenger-token", data.token);
     dispatch(gotUser(data));
-    socket.io.opts.query = {
-      token: data.token,
-    };
-    socket.connect();
-    socket.emit("go-online", data.id);
+    createConnection(socket, data);
   } catch (error) {
     console.error(error);
     dispatch(gotUser({ error: error.response.data.error || "Server Error" }));
@@ -60,11 +51,7 @@ export const login = (credentials) => async (dispatch) => {
     const { data } = await axios.post("/auth/login", credentials);
     await localStorage.setItem("messenger-token", data.token);
     dispatch(gotUser(data));
-    socket.io.opts.query = {
-      token: data.token,
-    };
-    socket.connect();
-    socket.emit("go-online", data.id);
+    createConnection(socket, data);
   } catch (error) {
     // console.error(error);
     console.log(error);
@@ -149,3 +136,12 @@ export const searchUsers = (searchTerm) => async (dispatch) => {
     console.error(error);
   }
 };
+
+function createConnection(socket, userData) {
+  const token = localStorage.getItem("messenger-token");
+  socket.io.opts.query = {
+    token: token,
+  };
+  socket.connect();
+  socket.emit("go-online", userData.id);
+}

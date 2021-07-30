@@ -46,7 +46,6 @@ socket.on("unauthorized", (msg) => {
   throw new Error(msg.data.type);
 });
 
-// Handling token expiration
 socket.on("connect_error", (error) => {
   console.log("error----", error);
   throw new Error(error);

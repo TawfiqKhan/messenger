@@ -21,9 +21,11 @@ const Login = (props) => {
     const password = event.target.password.value;
 
     await login({ username, password });
+    console.log("Done from login  fucntion----");
   };
 
   if (user.id) {
+    console.log("redirecting----");
     return <Redirect to="/home" />;
   }
 
