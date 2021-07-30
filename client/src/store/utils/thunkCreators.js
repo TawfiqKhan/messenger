@@ -1,11 +1,11 @@
 import axios from "axios";
 import socket from "../../socket";
+import io from "socket.io-client";
 import {
   gotConversations,
   addConversation,
   setNewMessage,
   setSearchedUsers,
-  addOtherUserActiveChat,
   updateMessagesReadStatus,
 } from "../conversations";
 import { gotUser, setFetchingStatus } from "../user";
@@ -51,10 +51,15 @@ export const login = (credentials) => async (dispatch) => {
     const { data } = await axios.post("/auth/login", credentials);
     await localStorage.setItem("messenger-token", data.token);
     dispatch(gotUser(data));
+    socket.io.opts.query = {
+      token: data.token,
+    };
+    socket.connect();
     socket.emit("go-online", data.id);
   } catch (error) {
-    console.error(error);
-    dispatch(gotUser({ error: error.response.data.error || "Server Error" }));
+    // console.error(error);
+    console.log(error);
+    // dispatch(gotUser({ error: error.response.data.error || "Server Error" }));
   }
 };
 
@@ -64,6 +69,7 @@ export const logout = (id) => async (dispatch) => {
     await localStorage.removeItem("messenger-token");
     dispatch(gotUser({}));
     socket.emit("logout", id, socket.id);
+    socket.disconnect();
   } catch (error) {
     console.error(error);
   }

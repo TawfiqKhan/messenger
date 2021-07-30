@@ -30,60 +30,91 @@ const server = http.createServer(app);
  */
 
 const io = require("socket.io")(server);
+const jwt = require("jsonwebtoken");
 
-io.on("connection", (socket) => {
+io.use(function (socket, next) {
+  console.log("line 36----", socket.handshake.query);
+  if (socket.handshake.query && socket.handshake.query.token) {
+    console.log("Here");
+    jwt.verify(
+      socket.handshake.query.token,
+      "my_secret",
+      function (err, decoded) {
+        if (err) return next(new Error("Authentication error"));
+        socket.decoded = decoded;
+        next();
+      }
+    );
+  } else {
+    console.log("error----");
+    next(new Error("Authentication error"));
+  }
+}).on("connection", function (socket) {
+  console.log("Here as well----");
+  // Connection now authenticated to receive further events
+
+  socket.on("message", function (message) {
+    io.emit("message", message);
+  });
+
   socket.on("go-online", (id) => {
-    if (!onlineUsers[id]) {
-      onlineUsers[id] = { id, activeConv: null, socket_id: socket.id };
-      // send the user who just went online to everyone else who is already online
-      socket.broadcast.emit("add-online-user", id);
-    } else {
-      // this is a edge case where if the user is online but reloads his browser
-      onlineUsers[id].socket_id = socket.id;
-    }
-  });
-
-  socket.on("new-message", (data) => {
-    const intendedReceiver = findReceiver(data.recipientId);
-    if (intendedReceiver) {
-      // only emit to the reciver
-      io.to(intendedReceiver.socket_id).emit("new-message", {
-        message: data.message,
-        sender: data.sender,
-        recipient: data.recipientId,
-        id: intendedReceiver.socket_id,
-      });
-    }
-  });
-
-  socket.on("started-typing", ({ reqBody }) => {
-    const intendedReceiver = findReceiver(reqBody.recipientId);
-    if (intendedReceiver) {
-      io.to(intendedReceiver.socket_id).emit("started-typing", {
-        body: reqBody,
-      });
-    }
-  });
-
-  socket.on("update-messages", ({ convoId, otherUserId }) => {
-    const intendedReceiver = findReceiver(otherUserId);
-    // only send update event if they reciver is online, else their messages will update once they sign back in.
-    if (intendedReceiver) {
-      io.to(intendedReceiver.socket_id).emit("update-messages", {
-        convoId,
-        otherUserId,
-      });
-    }
-  });
-
-  socket.on("logout", (id, socket_id) => {
-    // condition preventing unauthorized users to log someone else out
-    if (onlineUsers[id] && onlineUsers[id].socket_id) {
-      delete onlineUsers[id];
-    }
-    socket.broadcast.emit("remove-offline-user", id);
+    console.log("user went online id::::::", id);
   });
 });
+
+// io.on("connection", (socket) => {
+//   socket.on("go-online", (id) => {
+//     if (!onlineUsers[id]) {
+//       onlineUsers[id] = { id, activeConv: null, socket_id: socket.id };
+//       // send the user who just went online to everyone else who is already online
+//       socket.broadcast.emit("add-online-user", id);
+//     } else {
+//       // this is a edge case where if the user is online but reloads his browser
+//       onlineUsers[id].socket_id = socket.id;
+//     }
+//   });
+
+//   socket.on("new-message", (data) => {
+//     const intendedReceiver = findReceiver(data.recipientId);
+//     if (intendedReceiver) {
+//       // only emit to the reciver
+//       io.to(intendedReceiver.socket_id).emit("new-message", {
+//         message: data.message,
+//         sender: data.sender,
+//         recipient: data.recipientId,
+//         id: intendedReceiver.socket_id,
+//       });
+//     }
+//   });
+
+//   socket.on("started-typing", ({ reqBody }) => {
+//     const intendedReceiver = findReceiver(reqBody.recipientId);
+//     if (intendedReceiver) {
+//       io.to(intendedReceiver.socket_id).emit("started-typing", {
+//         body: reqBody,
+//       });
+//     }
+//   });
+
+//   socket.on("update-messages", ({ convoId, otherUserId }) => {
+//     const intendedReceiver = findReceiver(otherUserId);
+//     // only send update event if they reciver is online, else their messages will update once they sign back in.
+//     if (intendedReceiver) {
+//       io.to(intendedReceiver.socket_id).emit("update-messages", {
+//         convoId,
+//         otherUserId,
+//       });
+//     }
+//   });
+
+//   socket.on("logout", (id, socket_id) => {
+//     // condition preventing unauthorized users to log someone else out
+//     if (onlineUsers[id] && onlineUsers[id].socket_id) {
+//       delete onlineUsers[id];
+//     }
+//     socket.broadcast.emit("remove-offline-user", id);
+//   });
+// });
 
 sessionStore
   .sync()
