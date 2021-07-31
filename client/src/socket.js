@@ -44,8 +44,4 @@ socket.on("unauthorized", (msg) => {
   throw new Error(msg.data.type);
 });
 
-socket.on("connect_error", (error) => {
-  throw new Error(error);
-});
-
 export default socket;

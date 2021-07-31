@@ -50,7 +50,6 @@ io.use(function (socket, next) {
   // Connection now authenticated to receive further events
   const { userId } = socket.handshake.query;
   socket.join(`room:${userId}`);
-  // console.log("rooms----", io.sockets.adapter.rooms);
 
   socket.on("go-online", (id) => {
     if (!onlineUsers[id]) {
