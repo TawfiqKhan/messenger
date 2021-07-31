@@ -60,9 +60,7 @@ router.get("/", async (req, res, next) => {
         convoJSON.otherUser = convoJSON.user2;
         delete convoJSON.user2;
       }
-
-      // set property for online status of the other user
-      if (onlineUsers.some((user) => user.id === convoJSON.otherUser.id)) {
+      if (onlineUsers[convoJSON.otherUser.id]) {
         convoJSON.otherUser.online = true;
       } else {
         convoJSON.otherUser.online = false;
@@ -85,8 +83,7 @@ router.post("/new", async (req, res) => {
 });
 
 router.post("/getReceiver", async (req, res) => {
-  const receiver =
-    onlineUsers.find((user) => user.id === req.body.userId) || null;
+  const receiver = onlineUsers[req.body.userId] || null;
   res.json(receiver);
 });
 

@@ -8,43 +8,40 @@ import {
   updateMessagesReadStatus,
 } from "./store/conversations";
 
-const socket = io(window.location.origin);
-
+// setting up conenction for later conenction when user logged in.
+const socket = io.connect(window.location.origin, {
+  query: null,
+  autoConnect: false,
+});
 socket.on("connect", () => {
   console.log("connected to server");
-  const user = store.getState().user;
+});
+socket.on("add-online-user", (id) => {
+  store.dispatch(addOnlineUser(id));
+});
 
-  socket.on("add-online-user", (id) => {
-    store.dispatch(addOnlineUser(id));
-  });
+socket.on("remove-offline-user", (id) => {
+  store.dispatch(removeOfflineUser(id));
+});
 
-  socket.on("remove-offline-user", (id) => {
-    store.dispatch(removeOfflineUser(id));
-  });
+// This listener is for reciver client, who will update their state with the new message`
+socket.on("new-message", async (data) => {
+  store.dispatch(setNewMessage(data.message, data.sender, data.recipient));
+});
 
-  // This listener is for reciver client, who will update their state with the new message`
-  socket.on("new-message", async (data) => {
-    // if the message is for the user only then call the dispatch
-    if (user.id === data.recipient) {
-      store.dispatch(setNewMessage(data.message, data.sender, data.recipient));
-    }
-  });
+socket.on("update-messages", ({ convoId, otherUserId }) => {
+  store.dispatch(updateMessagesReadStatus(convoId));
+});
 
-  socket.on("update-messages", ({ convoId, otherUserId }) => {
-    if (user.id === otherUserId) {
-      store.dispatch(updateMessagesReadStatus(convoId));
-    }
-  });
+socket.on("started-typing", ({ body }) => {
+  store.dispatch(setTypingStatus(body, true));
+  setTimeout(() => {
+    store.dispatch(setTypingStatus(body, false));
+  }, 1000);
+});
 
-  socket.on("started-typing", ({ body }) => {
-    // check if the message is intended for the user, only then show typing status
-    if (user.id === body.recipientId) {
-      store.dispatch(setTypingStatus(body, true));
-      setTimeout(() => {
-        store.dispatch(setTypingStatus(body, false));
-      }, 1000);
-    }
-  });
+socket.on("unauthorized", (msg) => {
+  throw new Error(msg.data.type);
 });
 
 export default socket;

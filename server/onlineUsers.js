@@ -1,2 +1,2 @@
-let onlineUsers = [];
+let onlineUsers = {};
 module.exports = onlineUsers;

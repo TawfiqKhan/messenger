@@ -12,8 +12,7 @@ router.post("/", async (req, res, next) => {
     const { recipientId, text, conversationId, sender } = req.body;
 
     // checck to see if the receiver is online and seeing the same conversation
-    const recipient =
-      onlineUsers.find((user) => user.id === recipientId) || null;
+    const recipient = onlineUsers[recipientId] || null;
     const receiverHasRead =
       recipient && recipient.activeConv === conversationId ? true : false;
 
@@ -47,7 +46,7 @@ router.post("/", async (req, res, next) => {
         user1Id: senderId,
         user2Id: recipientId,
       });
-      if (onlineUsers.some((user) => user.id === sender.id)) {
+      if (onlineUsers[sender.id]) {
         sender.online = true;
       }
     }
@@ -66,7 +65,7 @@ router.post("/", async (req, res, next) => {
 router.put("/update", async (req, res) => {
   const { messageIds, userId, convoId, otherUserId } = req.body;
   // first add users info to onlineUsers
-  const currentUser = onlineUsers.find((user) => user.id === userId);
+  const currentUser = onlineUsers[userId] || null;
   if (currentUser) {
     currentUser.activeConv = convoId;
   }
