@@ -139,6 +139,7 @@ function createConnection(socket, userData) {
   const token = localStorage.getItem("messenger-token");
   socket.io.opts.query = {
     token: token,
+    userId: userData.id,
   };
   socket.connect();
   socket.emit("go-online", userData.id);

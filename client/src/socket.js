@@ -8,8 +8,7 @@ import {
   updateMessagesReadStatus,
 } from "./store/conversations";
 
-const token = window.localStorage.getItem("messenger-token") || "Hello";
-
+// setting up conenction for later conenction when user logged in.
 const socket = io.connect(window.location.origin, {
   query: null,
   autoConnect: false,
