@@ -42,12 +42,10 @@ socket.on("started-typing", ({ body }) => {
 });
 
 socket.on("unauthorized", (msg) => {
-  console.log(`unauthorized: ${JSON.stringify(msg.data)}`);
   throw new Error(msg.data.type);
 });
 
 socket.on("connect_error", (error) => {
-  console.log("error----", error);
   throw new Error(error);
 });
 

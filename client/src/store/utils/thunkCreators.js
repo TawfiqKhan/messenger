@@ -53,9 +53,7 @@ export const login = (credentials) => async (dispatch) => {
     dispatch(gotUser(data));
     createConnection(socket, data);
   } catch (error) {
-    // console.error(error);
-    console.log(error);
-    // dispatch(gotUser({ error: error.response.data.error || "Server Error" }));
+    dispatch(gotUser({ error: error.response.data.error || "Server Error" }));
   }
 };
 
