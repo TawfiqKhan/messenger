@@ -48,30 +48,24 @@ io.use(function (socket, next) {
   }
 }).on("connection", (socket) => {
   // Connection now authenticated to receive further events
-  // Can join a room from here maybe
   const { userId } = socket.handshake.query;
   socket.join(`room:${userId}`);
-  console.log("rooms----", io.sockets.adapter.rooms);
+  // console.log("rooms----", io.sockets.adapter.rooms);
 
   socket.on("go-online", (id) => {
     if (!onlineUsers[id]) {
       onlineUsers[id] = { id, activeConv: null, socketId: socket.id };
       // send the user who just went online to everyone else who is already online
       socket.broadcast.emit("add-online-user", id);
-      // await socket.join(`room:${userId}`);
     } else {
       // this is a edge case where if the user is online but reloads his browser
-      socket.join(`room:${userId}`);
       onlineUsers[id].socketId = socket.id;
     }
   });
 
   socket.on("new-message", (data) => {
     const intendedReceiver = onlineUsers[data.recipientId];
-    console.log("line 65----", intendedReceiver);
     if (intendedReceiver) {
-      console.log("line 72---", intendedReceiver);
-      console.log("receiver---", `room:${intendedReceiver.id}`);
       // only emit to the reciver
       io.to(`room:${intendedReceiver.id}`).emit("new-message", {
         message: data.message,
@@ -85,7 +79,7 @@ io.use(function (socket, next) {
   socket.on("started-typing", ({ reqBody }) => {
     const intendedReceiver = onlineUsers[reqBody.recipientId];
     if (intendedReceiver) {
-      io.to(intendedReceiver.socketId).emit("started-typing", {
+      io.to(`room:${intendedReceiver.id}`).emit("started-typing", {
         body: reqBody,
       });
     }
@@ -95,7 +89,7 @@ io.use(function (socket, next) {
     const intendedReceiver = onlineUsers[otherUserId];
     // only send update event if they reciver is online, else their messages will update once they sign back in.
     if (intendedReceiver) {
-      io.to(intendedReceiver.socketId).emit("update-messages", {
+      io.to(`room:${intendedReceiver.id}`).emit("update-messages", {
         convoId,
         otherUserId,
       });
