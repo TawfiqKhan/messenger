@@ -61,7 +61,8 @@ io.use(function (socket, next) {
   });
 
   socket.on("new-message", (data) => {
-    const intendedReceiver = findReceiver(data.recipientId);
+    const intendedReceiver = onlineUsers[data.recipientId];
+    console.log("line 65----", intendedReceiver);
     if (intendedReceiver) {
       // only emit to the reciver
       io.to(intendedReceiver.socket_id).emit("new-message", {
@@ -74,7 +75,7 @@ io.use(function (socket, next) {
   });
 
   socket.on("started-typing", ({ reqBody }) => {
-    const intendedReceiver = findReceiver(reqBody.recipientId);
+    const intendedReceiver = onlineUsers[reqBody.recipientId];
     if (intendedReceiver) {
       io.to(intendedReceiver.socket_id).emit("started-typing", {
         body: reqBody,
@@ -83,7 +84,7 @@ io.use(function (socket, next) {
   });
 
   socket.on("update-messages", ({ convoId, otherUserId }) => {
-    const intendedReceiver = findReceiver(otherUserId);
+    const intendedReceiver = onlineUsers[otherUserId];
     // only send update event if they reciver is online, else their messages will update once they sign back in.
     if (intendedReceiver) {
       io.to(intendedReceiver.socket_id).emit("update-messages", {
@@ -135,9 +136,9 @@ function normalizePort(val) {
  * Event listener for HTTP server "error" event.
  */
 
-function findReceiver(recipientId) {
-  return onlineUsers[recipientId] || null;
-}
+// function findReceiver(recipientId) {
+//   return onlineUsers[recipientId] || null;
+// }
 
 function onError(error) {
   if (error.syscall !== "listen") {
