@@ -29,6 +29,9 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     minHeight: "100vh",
     paddingTop: 23,
+    "& .makeStyles-authHeader-8": {
+      justifyContent: "center",
+    },
   },
   introImage: {
     objectFit: "cover",
@@ -60,7 +63,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Login = (props) => {
-  const history = useHistory();
   const { user, register } = props;
   const [formErrorMessage, setFormErrorMessage] = useState({});
   const classes = useStyles();

@@ -28,6 +28,9 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     minHeight: "100vh",
     paddingTop: 23,
+    "& .makeStyles-authHeader-8": {
+      justifyContent: "center",
+    },
   },
   introImage: {
     objectFit: "cover",
@@ -59,7 +62,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Login = (props) => {
-  const history = useHistory();
   const { user, login } = props;
   const classes = useStyles();
 
@@ -76,42 +78,6 @@ const Login = (props) => {
   }
 
   return (
-    // <Grid container justifyContent="center">
-    //   <Box>
-    //     <Grid container item>
-    //       <Typography>Need to register?</Typography>
-    //       <Button onClick={() => history.push("/register")}>Register</Button>
-    //     </Grid>
-    //     <form onSubmit={handleLogin}>
-    //       <Grid>
-    //         <Grid>
-    //           <FormControl margin="normal" required>
-    //             <TextField
-    //               aria-label="username"
-    //               label="Username"
-    //               name="username"
-    //               type="text"
-    //             />
-    //           </FormControl>
-    //         </Grid>
-    //         <FormControl margin="normal" required>
-    //           <TextField
-    //             label="password"
-    //             aria-label="password"
-    //             type="password"
-    //             name="password"
-    //           />
-    //         </FormControl>
-    //         <Grid>
-    //           <Button type="submit" variant="contained" size="large">
-    //             Login
-    //           </Button>
-    //         </Grid>
-    //       </Grid>
-    //     </form>
-    //   </Box>
-    // </Grid>
-
     <Grid container component="main" className={classes.root}>
       <Grid item xs={12} sm={5} md={6} elevation={6} component={Paper} square>
         <img src={img} alt="" className={classes.introImage} />
