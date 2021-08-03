@@ -16,10 +16,23 @@ import { login } from "./store/utils/thunkCreators";
 import img from "./images/bg-img.png";
 import AuthHeader from "./AuthHeader";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     flexGrow: 8,
+  },
+  authWrapper: {
+    display: "flex",
+    alignItems: "flex-start",
+    justifyContent: "space-between",
+    flexDirection: "column",
+    minHeight: "100vh",
+    paddingTop: 23,
+  },
+  introImage: {
+    objectFit: "cover",
+    height: "100%",
+    width: "100%",
   },
   welcome: {
     fontSize: 26,
@@ -27,6 +40,21 @@ const useStyles = makeStyles(() => ({
     color: "#000000",
     fontWeight: 700,
     fontFamily: "'Open Sans'",
+  },
+  form: {
+    width: "100%", // Fix IE 11 issue.
+    marginTop: theme.spacing(1),
+    display: "flex",
+    flexDirection: "column",
+  },
+  submit: {
+    padding: 10,
+    width: 160,
+    borderRadius: theme.shape.borderRadius,
+    marginTop: 49,
+    fontSize: 16,
+    backgroundColor: "#3a8dff",
+    fontWeight: "bold",
   },
 }));
 
@@ -85,11 +113,11 @@ const Login = (props) => {
     // </Grid>
 
     <Grid container component="main" className={classes.root}>
-      <Grid item xs={12} sm={6} md={5} elevation={6} component={Paper} square>
+      <Grid item xs={12} sm={5} md={6} elevation={6} component={Paper} square>
         <img src={img} alt="" className={classes.introImage} />
       </Grid>
       <CssBaseline />
-      <Grid item xs={12} sm={6} md={7} elevation={6} component={Paper} square>
+      <Grid item xs={12} sm={7} md={6} elevation={6} component={Paper} square>
         <Box className={classes.authWrapper}>
           <AuthHeader
             linkTo="/register"
@@ -108,33 +136,33 @@ const Login = (props) => {
                 </Typography>
               </Grid>
             </Grid>
-            {/* <LoginForm handleSubmit={handleSubmit} demoLogin={demoLogin} /> */}
-            <form onSubmit={handleLogin}>
-              <Grid>
-                <Grid>
-                  <FormControl margin="normal" required>
-                    <TextField
-                      aria-label="username"
-                      label="Username"
-                      name="username"
-                      type="text"
-                    />
-                  </FormControl>
-                </Grid>
-                <FormControl margin="normal" required>
-                  <TextField
-                    label="password"
-                    aria-label="password"
-                    type="password"
-                    name="password"
-                  />
-                </FormControl>
-                <Grid>
-                  <Button type="submit" variant="contained" size="large">
-                    Login
-                  </Button>
-                </Grid>
-              </Grid>
+            <form onSubmit={handleLogin} className={classes.form}>
+              <FormControl margin="normal" required>
+                <TextField
+                  aria-label="username"
+                  label="Username"
+                  fullWidth
+                  name="username"
+                  type="text"
+                />
+              </FormControl>
+              <FormControl margin="normal" required>
+                <TextField
+                  label="password"
+                  aria-label="password"
+                  type="password"
+                  name="password"
+                  fullWidth
+                />
+              </FormControl>
+              <Button
+                type="submit"
+                variant="contained"
+                size="large"
+                className={classes.submit}
+              >
+                Login
+              </Button>
             </form>
           </Box>
           <Box p={1} alignSelf="center" />
