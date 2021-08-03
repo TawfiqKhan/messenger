@@ -11,9 +11,13 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     display: "flex",
     flexWrap: "wrap",
+    [theme.breakpoints.down("sm")]: {
+      alignSelf: "center",
+      justifyContent: "center",
+    },
   },
   accAside: {
-    fontSize: 14,
+    fontSize: "1.3rem",
     color: "#b0b0b0",
     fontWeight: 400,
     textAlign: "center",

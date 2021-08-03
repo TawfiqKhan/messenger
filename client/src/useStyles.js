@@ -7,30 +7,34 @@ const useStyles = makeStyles((theme) => ({
   },
   authWrapper: {
     display: "flex",
-    alignItems: "flex-start",
     justifyContent: "space-between",
     flexDirection: "column",
     minHeight: "100vh",
     paddingTop: 23,
-    "& .makeStyles-authHeader-8": {
-      justifyContent: "center",
+    [theme.breakpoints.down("xs")]: {
+      justifyContent: "flex-start",
     },
   },
   imageContainer: {
     position: "relative",
+    background: "#3a8dff",
+    [theme.breakpoints.down("xs")]: {
+      height: 300,
+    },
   },
   introImage: {
     objectFit: "cover",
     height: "100%",
     width: "100%",
+    opacity: "0.4",
   },
 
   introText: {
     position: "absolute",
     zIndex: 100,
-    top: "50%",
+    top: "40%",
     left: "50%",
-    fontSize: 38,
+    fontSize: "2rem",
     width: "70%",
     fontWeight: 700,
     color: "#FFF",
@@ -38,9 +42,18 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    textAlign: "center",
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "1.4rem",
+      width: "90%",
+    },
+
     "& svg": {
-      fontSize: 65,
+      fontSize: "3.5rem",
       marginBottom: "5%",
+      [theme.breakpoints.down("sm")]: {
+        fontSize: "2.5rem",
+      },
     },
   },
   welcome: {
@@ -65,6 +78,9 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#3a8dff",
     fontWeight: 700,
     color: "#FFF",
+    [theme.breakpoints.down("xs")]: {
+      width: "100%",
+    },
   },
 }));
 
