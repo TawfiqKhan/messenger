@@ -11,9 +11,9 @@ Messenger is a full stack app built with React that allow users to chat with oth
 
 ## Final Product
 
-!["Homepage"](https://github.com/special3220/scheduler/blob/master/docs/home.jpeg?raw=true)
+!["Homepage"](https://raw.githubusercontent.com/TawfiqKhan/messenger/main/client/docs/images/home.jpeg)
 
-!["Chat"](https://github.com/special3220/scheduler/blob/master/docs/chat.jpeg?raw=true)
+!["Chat"](https://raw.githubusercontent.com/TawfiqKhan/messenger/main/client/docs/images/chat.jpeg)
 
 ## Framework/Services
 
