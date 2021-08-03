@@ -4,6 +4,8 @@ import { connect } from "react-redux";
 import useStyles from "./useStyles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Paper from "@material-ui/core/Paper";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faComments } from "@fortawesome/free-solid-svg-icons";
 import {
   Grid,
   Box,
@@ -34,8 +36,21 @@ const Login = (props) => {
 
   return (
     <Grid container component="main" className={classes.root}>
-      <Grid item xs={12} sm={5} md={6} elevation={6} component={Paper} square>
+      <Grid
+        item
+        xs={12}
+        sm={5}
+        md={6}
+        elevation={6}
+        component={Paper}
+        square
+        className={classes.imageContainer}
+      >
         <img src={img} alt="" className={classes.introImage} />
+        <Typography className={classes.introText}>
+          <FontAwesomeIcon icon={faComments} />
+          Converse with anyone in any language
+        </Typography>
       </Grid>
       <CssBaseline />
       <Grid item xs={12} sm={7} md={6} elevation={6} component={Paper} square>

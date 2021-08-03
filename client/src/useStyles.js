@@ -16,10 +16,32 @@ const useStyles = makeStyles((theme) => ({
       justifyContent: "center",
     },
   },
+  imageContainer: {
+    position: "relative",
+  },
   introImage: {
     objectFit: "cover",
     height: "100%",
     width: "100%",
+  },
+
+  introText: {
+    position: "absolute",
+    zIndex: 100,
+    top: "50%",
+    left: "50%",
+    fontSize: 38,
+    width: "70%",
+    fontWeight: 700,
+    color: "#FFF",
+    transform: "translate(-50%,-50%)",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    "& svg": {
+      fontSize: 65,
+      marginBottom: "5%",
+    },
   },
   welcome: {
     fontSize: 26,
