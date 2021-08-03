@@ -1,6 +1,26 @@
 # Messenger
 
-A one-to-one realtime chat app.
+Messenger is a full stack app built with React that allow users to chat with other users.
+
+## App Features
+
+- Chat with other users
+- See who is online when searching for another user.
+- See whether the sent messages has been read by the recipient.
+- See when the other user is typing.
+
+## Final Product
+
+!["Homepage"](https://github.com/special3220/scheduler/blob/master/docs/home.jpeg?raw=true)
+
+!["Chat"](https://github.com/special3220/scheduler/blob/master/docs/chat.jpeg?raw=true)
+
+## Framework/Services
+
+- React with redux
+- Axios
+- Sequlize with PSQL
+- socket.io
 
 ## Initial Setup
 
