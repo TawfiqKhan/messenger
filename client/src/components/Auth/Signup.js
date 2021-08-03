@@ -15,8 +15,8 @@ import {
   TextField,
   FormHelperText,
 } from "@material-ui/core";
-import { register } from "./store/utils/thunkCreators";
-import img from "./images/bg-img.png";
+import { register } from "../../store/utils/thunkCreators";
+import img from "../../images/bg-img.png";
 import AuthHeader from "./AuthHeader";
 
 const Login = (props) => {
