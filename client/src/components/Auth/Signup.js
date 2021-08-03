@@ -1,6 +1,11 @@
 import React, { useState } from "react";
-import { Redirect, useHistory } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
+import useStyles from "./useStyles";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Paper from "@material-ui/core/Paper";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faComments } from "@fortawesome/free-solid-svg-icons";
 import {
   Grid,
   Box,
@@ -10,12 +15,14 @@ import {
   TextField,
   FormHelperText,
 } from "@material-ui/core";
-import { register } from "./store/utils/thunkCreators";
+import { register } from "../../store/utils/thunkCreators";
+import img from "../../images/bg-img.png";
+import AuthHeader from "./AuthHeader";
 
 const Login = (props) => {
-  const history = useHistory();
   const { user, register } = props;
   const [formErrorMessage, setFormErrorMessage] = useState({});
+  const classes = useStyles();
 
   const handleRegister = async (event) => {
     event.preventDefault();
@@ -37,26 +44,54 @@ const Login = (props) => {
   }
 
   return (
-    <Grid container justifyContent="center">
-      <Box>
-        <Grid container item>
-          <Typography>Need to log in?</Typography>
-          <Button onClick={() => history.push("/login")}>Login</Button>
-        </Grid>
-        <form onSubmit={handleRegister}>
-          <Grid>
-            <Grid>
-              <FormControl>
+    <Grid container component="main" className={classes.root}>
+      <Grid
+        item
+        xs={12}
+        sm={5}
+        md={6}
+        elevation={6}
+        component={Paper}
+        square
+        className={classes.imageContainer}
+      >
+        <img src={img} alt="" className={classes.introImage} />
+        <Typography className={classes.introText}>
+          <FontAwesomeIcon icon={faComments} />
+          Converse with anyone in any language
+        </Typography>
+      </Grid>
+      <CssBaseline />
+      <Grid item xs={12} sm={7} md={6} elevation={6} component={Paper} square>
+        <Box className={classes.authWrapper}>
+          <AuthHeader
+            linkTo="/login"
+            asideText="Have an account?"
+            btnText="Login"
+          />
+          <Box width="100%" maxWidth={450} p={3} alignSelf="center">
+            <Grid container>
+              <Grid item xs>
+                <Typography
+                  className={classes.welcome}
+                  component="h1"
+                  variant="h5"
+                >
+                  Create an account!
+                </Typography>
+              </Grid>
+            </Grid>
+            <form onSubmit={handleRegister} className={classes.form}>
+              <FormControl margin="normal" required>
                 <TextField
                   aria-label="username"
                   label="Username"
+                  fullWidth
                   name="username"
                   type="text"
                   required
                 />
               </FormControl>
-            </Grid>
-            <Grid>
               <FormControl>
                 <TextField
                   label="E-mail address"
@@ -66,8 +101,6 @@ const Login = (props) => {
                   required
                 />
               </FormControl>
-            </Grid>
-            <Grid>
               <FormControl error={!!formErrorMessage.confirmPassword}>
                 <TextField
                   aria-label="password"
@@ -81,8 +114,6 @@ const Login = (props) => {
                   {formErrorMessage.confirmPassword}
                 </FormHelperText>
               </FormControl>
-            </Grid>
-            <Grid>
               <FormControl error={!!formErrorMessage.confirmPassword}>
                 <TextField
                   label="Confirm Password"
@@ -96,13 +127,20 @@ const Login = (props) => {
                   {formErrorMessage.confirmPassword}
                 </FormHelperText>
               </FormControl>
-            </Grid>
-            <Button type="submit" variant="contained" size="large">
-              Create
-            </Button>
-          </Grid>
-        </form>
-      </Box>
+              <Button
+                type="submit"
+                variant="contained"
+                size="large"
+                color="primary"
+                className={classes.submit}
+              >
+                Register
+              </Button>
+            </form>
+          </Box>
+          <Box p={1} alignSelf="center" />
+        </Box>
+      </Grid>
     </Grid>
   );
 };

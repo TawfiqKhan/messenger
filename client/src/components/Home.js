@@ -34,7 +34,6 @@ const Home = (props) => {
   const handleLogout = async () => {
     await props.logout(props.user.id);
   };
-
   const { classes } = props;
   if (!props.user.id) {
     // If we were previously logged in, redirect to login instead of register

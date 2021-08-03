@@ -1,6 +1,5 @@
 // import React, { Component } from "react";
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { Box } from "@material-ui/core";
 import { BadgeAvatar, ChatContent } from "../Sidebar";
 import { withStyles } from "@material-ui/core/styles";
