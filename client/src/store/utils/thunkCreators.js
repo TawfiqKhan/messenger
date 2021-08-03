@@ -1,6 +1,5 @@
 import axios from "axios";
 import socket from "../../socket";
-import io from "socket.io-client";
 import {
   gotConversations,
   addConversation,
