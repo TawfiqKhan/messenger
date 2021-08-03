@@ -4,8 +4,6 @@ import { connect } from "react-redux";
 import useStyles from "./useStyles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Paper from "@material-ui/core/Paper";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faComments } from "@fortawesome/free-solid-svg-icons";
 import {
   Grid,
   Box,
@@ -17,6 +15,7 @@ import {
 } from "@material-ui/core";
 import { register } from "../../store/utils/thunkCreators";
 import img from "../../images/bg-img.png";
+import bubble from "../../images/bubble.svg";
 import AuthHeader from "./AuthHeader";
 
 const Login = (props) => {
@@ -57,7 +56,7 @@ const Login = (props) => {
       >
         <img src={img} alt="" className={classes.introImage} />
         <Typography className={classes.introText}>
-          <FontAwesomeIcon icon={faComments} />
+          <img src={bubble} alt="chat-icon" />
           Converse with anyone in any language
         </Typography>
       </Grid>

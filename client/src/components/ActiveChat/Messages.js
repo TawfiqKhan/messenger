@@ -18,6 +18,13 @@ const useStyles = makeStyles(() => ({
   bubble: {
     backgroundImage: "linear-gradient(225deg, #6CC1FF 0%, #3A8DFF 100%)",
     borderRadius: "0 10px 10px 10px",
+    display: "flex",
+    alignItems: "center",
+    marginTop: 10,
+    paddingRight: 10,
+    "& svg": {
+      color: "#FFFFFF",
+    },
   },
   text: {
     fontSize: 14,
@@ -66,10 +73,8 @@ const Messages = (props) => {
           ></Avatar>
           <Box>
             <Box className={classes.bubble}>
-              <Typography className={classes.text}>
-                Typing...
-                <CircularProgress color="secondary" size="1.2rem" />
-              </Typography>
+              <Typography className={classes.text}>Typing...</Typography>
+              <CircularProgress size="1.2rem" />
             </Box>
           </Box>
         </Box>

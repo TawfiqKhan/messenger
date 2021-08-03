@@ -48,11 +48,14 @@ const useStyles = makeStyles((theme) => ({
       width: "90%",
     },
 
-    "& svg": {
+    "& img": {
       fontSize: "3.5rem",
+      width: "15%",
+
       marginBottom: "5%",
       [theme.breakpoints.down("sm")]: {
-        fontSize: "2.5rem",
+        width: "12%",
+        marginBottom: "1%",
       },
     },
   },
